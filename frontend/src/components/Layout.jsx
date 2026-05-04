@@ -9,7 +9,8 @@ import {
   BarChart3,
   Settings,
   User,
-  LogOut
+  LogOut,
+  Brain
 } from 'lucide-react';
 
 const Layout = ({ children }) => {
@@ -45,6 +46,11 @@ const Layout = ({ children }) => {
       name: 'Bulk Messaging',
       path: '/bulk-messaging',
       icon: Send
+    },
+    {
+      name: 'Knowledge Base',
+      path: '/knowledge-base',
+      icon: Brain
     },
     {
       name: 'Settings',

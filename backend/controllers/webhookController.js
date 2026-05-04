@@ -1,5 +1,8 @@
 const Ticket = require('../models/Ticket');
 const Message = require('../models/Message');
+const kbService = require('../services/kbService');
+const chatbotService = require('../services/chatbotService');
+const WhatsAppService = require('../services/whatsappService');
 
 class WebhookController {
   // Webhook verification (GET request from Meta)
@@ -111,8 +114,51 @@ class WebhookController {
 
       // Update ticket status
       await Ticket.updateStatus(ticket.id, 'pending_reply');
+      console.log('✅ Ticket status updated');
 
-      console.log('✅ Message processed successfully');
+      // ⭐ AI CHATBOT INTEGRATION
+      console.log(`🤖 Consulting AI for: "${messageText}"`);
+      
+      // 1. Search Knowledge Base
+      const kbContext = await kbService.search(messageText);
+      console.log('✅ KB Search completed');
+      
+      // 2. Get AI Response
+      const aiResult = await chatbotService.getResponse(
+        messageText, 
+        kbContext, 
+        ticket.id
+      );
+      console.log('✅ AI Response received');
+      
+      // 3. Send AI response back to customer
+      console.log(`🤖 AI Response: ${aiResult.response}`);
+      try {
+        await WhatsAppService.sendMessage(from, aiResult.response);
+        console.log('✅ AI Response sent to WhatsApp');
+      } catch (waError) {
+        console.warn('⚠️ Failed to send WhatsApp response (likely invalid token), continuing...');
+      }
+      
+      // 4. Save AI message to database
+      await Message.create({
+        ticketId: ticket.id,
+        messageId: `ai_${Date.now()}`,
+        senderName: 'Priya',
+        messageText: aiResult.response,
+        messageType: 'text',
+        isFromCustomer: false,
+        timestamp: new Date()
+      });
+
+      // 5. If escalated, mark ticket status
+      if (aiResult.escalated) {
+        await Ticket.updateStatus(ticket.id, 'open'); // Or 'needs_human'
+      } else {
+        await Ticket.updateStatus(ticket.id, 'no_reply'); // Answered by AI
+      }
+
+      console.log('✅ Message processed successfully with AI');
     } catch (error) {
       console.error('❌ Error processing message:', error);
       throw error;

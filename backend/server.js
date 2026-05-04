@@ -15,6 +15,7 @@ const phoneRoutes = require('./routes/phones');             // ← NEW
 const templateRoutes = require('./routes/templates');       // ← NEW
 const contactRoutes = require('./routes/contacts');         // ← NEW
 const bulkMessageRoutes = require('./routes/bulkMessages'); 
+const kbRoutes = require('./routes/knowledgeBase');
 
 // Import database to test connection
 require('./config/database');
@@ -101,6 +102,7 @@ app.use('/api/phones', phoneRoutes);                  // ← NEW
 app.use('/api/templates', templateRoutes);            // ← NEW
 app.use('/api/contacts', contactRoutes);              // ← NEW
 app.use('/api/bulk-messages', bulkMessageRoutes);
+app.use('/api/knowledge-base', kbRoutes);
 
 // ==================== ERROR HANDLERS ====================
 

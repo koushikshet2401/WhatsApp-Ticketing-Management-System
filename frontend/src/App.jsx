@@ -10,6 +10,7 @@ import TemplatesPage from './pages/TemplatesPage';
 import ContactsPage from './pages/ContactsPage';
 import BulkMessagingPage from './pages/BulkMessagingPage';
 import PhoneNumbersPage from './pages/PhoneNumbersPage';
+import KnowledgeBasePage from './pages/KnowledgeBasePage';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import TicketsInbox from './pages/TicketsInbox';
@@ -107,6 +108,17 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <SettingsPage />
+              </Layout>
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/knowledge-base" 
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <KnowledgeBasePage />
               </Layout>
             </ProtectedRoute>
           } 

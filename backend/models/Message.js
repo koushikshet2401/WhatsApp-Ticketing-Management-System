@@ -15,7 +15,7 @@ class Message {
 
     const [result] = await db.execute(
       `INSERT INTO messages 
-       (ticket_id, message_id, sender_name, message_text, message_type, is_from_customer, timestamp) 
+       (ticket_id, message_id, sender_name, message_text, message_type, is_from_customer, created_at) 
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [ticketId, messageId, senderName, messageText, messageType, isFromCustomer, timestamp]
     );
@@ -28,7 +28,7 @@ class Message {
     const [messages] = await db.execute(
       `SELECT * FROM messages 
        WHERE ticket_id = ? 
-       ORDER BY timestamp ASC`,
+       ORDER BY created_at ASC`,
       [ticketId]
     );
     return messages;

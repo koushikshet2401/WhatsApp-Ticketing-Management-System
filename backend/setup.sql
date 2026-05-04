@@ -97,3 +97,20 @@ MODIFY COLUMN password VARCHAR(255) NOT NULL;
 -- Verify changes
 DESCRIBE staff;
 SELECT id, name, email, phone, LENGTH(password) as password_length FROM staff;
+
+-- Knowledge Base Tables
+CREATE TABLE IF NOT EXISTS documents (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    filename VARCHAR(255) NOT NULL,
+    file_path VARCHAR(255),
+    uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS document_chunks (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    document_id INT NOT NULL,
+    content TEXT NOT NULL,
+    embedding JSON,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (document_id) REFERENCES documents(id) ON DELETE CASCADE
+);
