@@ -107,7 +107,7 @@ const TemplatesPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
       </div>
     );
   }
@@ -122,7 +122,7 @@ const TemplatesPage = () => {
         </div>
         <button
           onClick={handleCreate}
-          className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
         >
           <Plus className="w-5 h-5" />
           Create Template
@@ -135,7 +135,7 @@ const TemplatesPage = () => {
           onClick={() => setSelectedCategory('all')}
           className={`px-4 py-2 rounded-lg whitespace-nowrap ${
             selectedCategory === 'all'
-              ? 'bg-blue-600 text-white'
+              ? 'bg-primary-600 text-white'
               : 'bg-white text-gray-700 hover:bg-gray-100'
           }`}
         >
@@ -147,7 +147,7 @@ const TemplatesPage = () => {
             onClick={() => setSelectedCategory(category)}
             className={`px-4 py-2 rounded-lg whitespace-nowrap capitalize ${
               selectedCategory === category
-                ? 'bg-blue-600 text-white'
+                ? 'bg-primary-600 text-white'
                 : 'bg-white text-gray-700 hover:bg-gray-100'
             }`}
           >
@@ -164,7 +164,7 @@ const TemplatesPage = () => {
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-gray-800">{template.name}</h3>
-                <span className="inline-block mt-1 px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full capitalize">
+                <span className="inline-block mt-1 px-3 py-1 bg-primary-100 text-primary-700 text-xs rounded-full capitalize">
                   {template.category}
                 </span>
               </div>
@@ -190,7 +190,7 @@ const TemplatesPage = () => {
               </button>
               <button
                 onClick={() => handleEdit(template)}
-                className="flex items-center justify-center bg-blue-100 text-blue-600 px-3 py-2 rounded-lg hover:bg-blue-200 transition-colors"
+                className="flex items-center justify-center bg-primary-100 text-primary-600 px-3 py-2 rounded-lg hover:bg-primary-200 transition-colors"
               >
                 <Edit2 className="w-4 h-4" />
               </button>
@@ -230,7 +230,7 @@ const TemplatesPage = () => {
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                   placeholder="e.g., Welcome Message"
                   required
                 />
@@ -242,7 +242,7 @@ const TemplatesPage = () => {
                 <select
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 >
                   {categories.map(cat => (
                     <option key={cat} value={cat} className="capitalize">{cat}</option>
@@ -256,7 +256,7 @@ const TemplatesPage = () => {
                 <textarea
                   value={formData.content}
                   onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                   rows="6"
                   placeholder="Hi {{name}}! Welcome to our support..."
                   required
@@ -270,7 +270,7 @@ const TemplatesPage = () => {
               <div className="flex gap-3">
                 <button
                   type="submit"
-                  className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  className="flex-1 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors font-medium"
                 >
                   {editingTemplate ? 'Update Template' : 'Create Template'}
                 </button>

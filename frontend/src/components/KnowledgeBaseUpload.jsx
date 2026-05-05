@@ -87,19 +87,19 @@ const KnowledgeBaseUpload = () => {
           <h2 className="text-3xl font-bold text-gray-800">Knowledge Base</h2>
           <p className="text-gray-500 mt-1">Manage documents that AI uses to answer customer queries.</p>
         </div>
-        <div className="bg-blue-50 p-3 rounded-full">
-          <File className="w-8 h-8 text-blue-600" />
+        <div className="bg-primary-50 p-3 rounded-full">
+          <File className="w-8 h-8 text-primary-600" />
         </div>
       </div>
 
       {/* Upload Section */}
       <div className="mb-10">
         <h3 className="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
-          <Upload className="w-5 h-5 text-blue-500" />
+          <Upload className="w-5 h-5 text-primary-500" />
           Upload New Documents
         </h3>
         
-        <div className="relative border-2 border-dashed border-gray-200 rounded-2xl p-10 text-center hover:border-blue-400 transition-colors group">
+        <div className="relative border-2 border-dashed border-gray-200 rounded-2xl p-10 text-center hover:border-primary-400 transition-colors group">
           <input
             type="file"
             multiple
@@ -110,8 +110,8 @@ const KnowledgeBaseUpload = () => {
           />
           
           <div className="flex flex-col items-center">
-            <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <Upload className="w-8 h-8 text-blue-600" />
+            <div className="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <Upload className="w-8 h-8 text-primary-600" />
             </div>
             <p className="text-gray-600 font-medium mb-1">
               Click to upload or drag and drop
@@ -138,7 +138,7 @@ const KnowledgeBaseUpload = () => {
               <button
                 onClick={handleUpload}
                 disabled={uploading}
-                className="w-full mt-4 bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+                className="w-full mt-4 bg-primary-600 text-white font-semibold py-3 rounded-xl hover:bg-primary-700 disabled:bg-primary-300 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
               >
                 {uploading ? (
                   <>
@@ -168,7 +168,7 @@ const KnowledgeBaseUpload = () => {
         
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 bg-gray-50 rounded-2xl border border-gray-100">
-            <Loader2 className="w-10 h-10 text-blue-600 animate-spin mb-4" />
+            <Loader2 className="w-10 h-10 text-primary-600 animate-spin mb-4" />
             <p className="text-gray-500 font-medium">Loading knowledge base...</p>
           </div>
         ) : uploadedDocs.length === 0 ? (
@@ -184,11 +184,11 @@ const KnowledgeBaseUpload = () => {
             {uploadedDocs.map((doc) => (
               <div
                 key={doc.id}
-                className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-xl hover:border-blue-200 hover:shadow-md transition-all group"
+                className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-xl hover:border-primary-200 hover:shadow-md transition-all group"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
-                    <File className="w-5 h-5 text-blue-600" />
+                  <div className="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center group-hover:bg-primary-100 transition-colors">
+                    <File className="w-5 h-5 text-primary-600" />
                   </div>
                   <div>
                     <p className="font-semibold text-gray-800">{doc.filename}</p>
@@ -201,7 +201,7 @@ const KnowledgeBaseUpload = () => {
                         })}
                       </span>
                       <span className="text-gray-300">•</span>
-                      <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
+                      <span className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">
                         {doc.chunks_count} AI Chunks
                       </span>
                     </div>
@@ -229,12 +229,12 @@ const KnowledgeBaseUpload = () => {
       </div>
 
       {/* Info Card */}
-      <div className="mt-10 p-5 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl text-white shadow-lg">
+      <div className="mt-10 p-5 bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl text-white shadow-lg">>
         <h4 className="font-bold text-lg mb-2 flex items-center gap-2">
           <AlertCircle className="w-5 h-5" />
           AI Automation Active
         </h4>
-        <p className="text-blue-50 text-sm leading-relaxed opacity-90">
+        <p className="text-primary-50 text-sm leading-relaxed opacity-90">
           The AI system is now training on these documents. When customers ask questions, the system will search through this content and respond as "Priya" (Human Agent). If the AI is unsure, it will automatically notify you via SMS/WhatsApp.
         </p>
       </div>

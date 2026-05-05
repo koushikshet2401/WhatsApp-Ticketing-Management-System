@@ -44,12 +44,12 @@ const AnalyticsDashboard = () => {
     }
   };
 
-  const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
+  const COLORS = ['#4B672D', '#83a436', '#c1d67a', '#F59E0B', '#EF4444'];
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
       </div>
     );
   }
@@ -65,10 +65,10 @@ const AnalyticsDashboard = () => {
       {/* Metrics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {/* Total Tickets */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-blue-500 hover:shadow-xl transition-shadow">
+        <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-primary-500 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-blue-100 rounded-lg">
-              <MessageSquare className="w-6 h-6 text-blue-600" />
+            <div className="p-3 bg-primary-100 rounded-lg">
+              <MessageSquare className="w-6 h-6 text-primary-600" />
             </div>
             <TrendingUp className="w-5 h-5 text-green-500" />
           </div>
@@ -128,7 +128,7 @@ const AnalyticsDashboard = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="messages" stroke="#3B82F6" strokeWidth={2} />
+              <Line type="monotone" dataKey="messages" stroke="#4B672D" strokeWidth={2} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -168,8 +168,8 @@ const AnalyticsDashboard = () => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="tickets" fill="#3B82F6" />
-            <Bar dataKey="messages" fill="#10B981" />
+            <Bar dataKey="tickets" fill="#4B672D" />
+            <Bar dataKey="messages" fill="#83a436" />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -177,9 +177,9 @@ const AnalyticsDashboard = () => {
       {/* Active Phone Numbers */}
       <div className="mt-6 bg-white rounded-2xl shadow-lg p-6">
         <div className="flex items-center gap-3 mb-4">
-          <Phone className="w-6 h-6 text-blue-600" />
+          <Phone className="w-6 h-6 text-primary-600" />
           <h3 className="text-lg font-semibold text-gray-800">Active Phone Numbers</h3>
-          <span className="ml-auto bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
+          <span className="ml-auto bg-primary-100 text-primary-600 px-3 py-1 rounded-full text-sm font-medium">
             {stats.activePhones} Active
           </span>
         </div>

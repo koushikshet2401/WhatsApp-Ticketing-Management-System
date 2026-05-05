@@ -69,7 +69,7 @@ const CreateTicketModal = ({ message, onClose, onSuccess }) => {
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               placeholder="Brief description of the issue"
               required
             />
@@ -81,7 +81,7 @@ const CreateTicketModal = ({ message, onClose, onSuccess }) => {
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               rows="4"
               placeholder="Detailed description..."
             />
@@ -94,7 +94,7 @@ const CreateTicketModal = ({ message, onClose, onSuccess }) => {
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="open">Open</option>
                 <option value="pending_reply">Pending Reply</option>
@@ -109,7 +109,7 @@ const CreateTicketModal = ({ message, onClose, onSuccess }) => {
               <select
                 value={formData.priority}
                 onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 {priorityOptions.map(priority => (
                   <option key={priority} value={priority}>
@@ -131,7 +131,7 @@ const CreateTicketModal = ({ message, onClose, onSuccess }) => {
                   onClick={() => toggleLabel(label)}
                   className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                     formData.labels.includes(label)
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-primary-600 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
@@ -145,7 +145,7 @@ const CreateTicketModal = ({ message, onClose, onSuccess }) => {
           <div className="flex gap-3">
             <button
               type="submit"
-              className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              className="flex-1 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors font-medium"
             >
               Create Ticket
             </button>

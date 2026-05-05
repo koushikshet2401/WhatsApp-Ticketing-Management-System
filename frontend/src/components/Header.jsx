@@ -31,7 +31,7 @@ const Header = () => {
       <div className="flex items-center justify-between">
         {/* Logo/Title */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+          <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center">
             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
@@ -50,7 +50,7 @@ const Header = () => {
               onClick={() => setShowNotifications(!showNotifications)}
               className="relative p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 group"
             >
-              <Bell className="w-5 h-5 text-gray-600 group-hover:text-blue-600 transition-colors" />
+              <Bell className="w-5 h-5 text-gray-600 group-hover:text-primary-600 transition-colors" />
               {unreadCount > 0 && (
                 <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center animate-pulse">
                   {unreadCount}
@@ -70,7 +70,7 @@ const Header = () => {
                     <div
                       key={notif.id}
                       className={`p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer ${
-                        notif.unread ? 'bg-blue-50' : ''
+                        notif.unread ? 'bg-primary-50' : ''
                       }`}
                     >
                       <p className="text-sm text-gray-800">{notif.text}</p>
@@ -79,7 +79,7 @@ const Header = () => {
                   ))}
                 </div>
                 <div className="p-3 border-t border-gray-200 text-center">
-                  <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                  <button className="text-sm text-primary-600 hover:text-primary-700 font-medium">
                     Mark all as read
                   </button>
                 </div>
@@ -92,7 +92,7 @@ const Header = () => {
             onClick={() => navigate('/settings')}
             className="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 group"
           >
-            <Settings className="w-5 h-5 text-gray-600 group-hover:text-blue-600 group-hover:rotate-90 transition-all duration-300" />
+            <Settings className="w-5 h-5 text-gray-600 group-hover:text-primary-600 group-hover:rotate-90 transition-all duration-300" />
           </button>
 
           {/* Profile Menu */}
@@ -101,7 +101,7 @@ const Header = () => {
               onClick={() => setShowProfileMenu(!showProfileMenu)}
               className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg transition-all duration-200"
             >
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center">
                 <User className="w-5 h-5 text-white" />
               </div>
               <div className="text-left hidden md:block">

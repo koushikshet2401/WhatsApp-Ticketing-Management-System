@@ -71,7 +71,7 @@ const Layout = ({ children }) => {
         {/* Logo */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
               <MessageSquare className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -93,8 +93,8 @@ const Layout = ({ children }) => {
                     className={({ isActive }) =>
                       `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                         isActive
-                          ? 'bg-blue-600 text-white'
-                          : 'text-gray-700 hover:bg-gray-100'
+                          ? 'bg-primary-600 text-white'
+                          : 'text-gray-700 hover:bg-primary-50'
                       }`
                     }
                   >
@@ -110,8 +110,8 @@ const Layout = ({ children }) => {
         {/* User Info & Logout */}
         <div className="p-4 border-t border-gray-200">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-blue-600" />
+            <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
+              <User className="w-5 h-5 text-primary-600" />
             </div>
             <div className="flex-1">
               <p className="font-medium text-gray-800">Koushik</p>

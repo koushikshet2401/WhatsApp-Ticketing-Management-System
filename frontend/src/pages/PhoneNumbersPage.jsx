@@ -97,7 +97,7 @@ const PhoneNumbersPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
       </div>
     );
   }
@@ -112,7 +112,7 @@ const PhoneNumbersPage = () => {
         </div>
         <button
           onClick={handleCreate}
-          className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
         >
           <Plus className="w-5 h-5" />
           Add Phone Number
@@ -124,7 +124,7 @@ const PhoneNumbersPage = () => {
         {phones.map((phone) => (
           <div
             key={phone.id}
-            className="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500 hover:shadow-lg transition-shadow"
+            className="bg-white rounded-xl shadow-md p-6 border-l-4 border-primary-500 hover:shadow-lg transition-shadow"
           >
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
@@ -170,7 +170,7 @@ const PhoneNumbersPage = () => {
             <div className="flex gap-2 pt-4 border-t border-gray-200">
               <button
                 onClick={() => handleEdit(phone)}
-                className="flex-1 flex items-center justify-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 bg-primary-50 text-primary-600 px-4 py-2 rounded-lg hover:bg-primary-100 transition-colors"
               >
                 <Edit2 className="w-4 h-4" />
                 Edit
@@ -194,7 +194,7 @@ const PhoneNumbersPage = () => {
           <p className="text-gray-500 mb-6">Add your first WhatsApp business number to get started</p>
           <button
             onClick={handleCreate}
-            className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+            className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700"
           >
             <Plus className="w-5 h-5" />
             Add Phone Number
@@ -219,7 +219,7 @@ const PhoneNumbersPage = () => {
                     type="text"
                     value={formData.displayName}
                     onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                     placeholder="e.g., Primary Business Line"
                     required
                   />
@@ -232,7 +232,7 @@ const PhoneNumbersPage = () => {
                     type="tel"
                     value={formData.phoneNumber}
                     onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                     placeholder="1234567890"
                     required
                     disabled={!!editingPhone}
@@ -246,7 +246,7 @@ const PhoneNumbersPage = () => {
                     type="text"
                     value={formData.whatsappPhoneId}
                     onChange={(e) => setFormData({ ...formData, whatsappPhoneId: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                     placeholder="From Meta Business Manager"
                     required
                   />
@@ -258,7 +258,7 @@ const PhoneNumbersPage = () => {
                   <textarea
                     value={formData.whatsappToken}
                     onChange={(e) => setFormData({ ...formData, whatsappToken: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                     rows="3"
                     placeholder="Permanent access token from Meta"
                     required
@@ -270,7 +270,7 @@ const PhoneNumbersPage = () => {
               <div className="flex gap-3">
                 <button
                   type="submit"
-                  className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  className="flex-1 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors font-medium"
                 >
                   {editingPhone ? 'Update Phone' : 'Add Phone'}
                 </button>

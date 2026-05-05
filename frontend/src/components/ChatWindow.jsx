@@ -181,8 +181,8 @@ const ChatWindow = ({ ticket, onMessageSent }) => {
     return (
       <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="text-center animate-fadeIn">
-          <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <AlertCircle className="w-12 h-12 text-blue-500" />
+          <div className="w-24 h-24 bg-gradient-to-br from-primary-50 to-primary-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <AlertCircle className="w-12 h-12 text-primary-500" />
           </div>
           <h3 className="text-xl font-semibold text-gray-700 mb-2">No Ticket Selected</h3>
           <p className="text-gray-500">Select a ticket from the sidebar to view conversation</p>
@@ -213,7 +213,7 @@ const ChatWindow = ({ ticket, onMessageSent }) => {
               className="p-2 hover:bg-gray-100 rounded-lg transition-all duration-200 group"
               title="Refresh messages"
             >
-              <RefreshCw className={`w-4 h-4 text-gray-600 group-hover:text-blue-600 transition-colors ${loading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-4 h-4 text-gray-600 group-hover:text-primary-600 transition-colors ${loading ? 'animate-spin' : ''}`} />
             </button>
 
             {/* Status Badge */}
@@ -233,7 +233,7 @@ const ChatWindow = ({ ticket, onMessageSent }) => {
                 value={assignedStaff}
                 onChange={(e) => handleAssignStaff(e.target.value)}
                 disabled={assigning}
-                className="px-3 py-1.5 rounded-lg border border-gray-300 text-sm bg-white hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors"
+                className="px-3 py-1.5 rounded-lg border border-gray-300 text-sm bg-white hover:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-400 transition-colors"
               >
                 <option value="">Assign to...</option>
                 {staff.map((s) => (
@@ -252,15 +252,15 @@ const ChatWindow = ({ ticket, onMessageSent }) => {
         {loading && messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <Loader2 className="w-10 h-10 text-blue-500 animate-spin mx-auto mb-3" />
+              <Loader2 className="w-10 h-10 text-primary-500 animate-spin mx-auto mb-3" />
               <p className="text-gray-500">Loading messages...</p>
             </div>
           </div>
         ) : messages.length === 0 ? (
           <div className="flex items-center justify-center h-full animate-fadeIn">
             <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <AlertCircle className="w-10 h-10 text-blue-500" />
+              <div className="w-20 h-20 bg-gradient-to-br from-primary-50 to-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <AlertCircle className="w-10 h-10 text-primary-500" />
               </div>
               <h3 className="text-lg font-medium text-gray-700 mb-2">No messages yet</h3>
               <p className="text-gray-500 text-sm">
@@ -309,7 +309,7 @@ const ChatWindow = ({ ticket, onMessageSent }) => {
               onKeyPress={handleKeyPress}
               placeholder="Type your message... (will be sent via WhatsApp)"
               rows="2"
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white resize-none custom-scrollbar transition-all duration-200"
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:bg-white resize-none custom-scrollbar transition-all duration-200"
               disabled={sending}
             />
           </div>
@@ -317,7 +317,7 @@ const ChatWindow = ({ ticket, onMessageSent }) => {
           <button
             type="submit"
             disabled={!newMessage.trim() || sending}
-            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2"
+            className="px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-800 text-white rounded-xl hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2"
           >
             {sending ? (
               <>

@@ -59,7 +59,7 @@ const SettingsPage = () => {
           <div>
             <button
               onClick={() => navigate('/dashboard')}
-              className="text-blue-600 hover:text-blue-700 text-sm font-medium mb-2"
+              className="text-primary-600 hover:text-primary-700 text-sm font-medium mb-2"
             >
               ← Back to Dashboard
             </button>
@@ -70,7 +70,7 @@ const SettingsPage = () => {
           {/* Save Button */}
           <button
             onClick={handleSave}
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all duration-200"
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-700 text-white rounded-xl hover:shadow-lg transition-all duration-200"
           >
             {saved ? (
               <>
@@ -99,7 +99,7 @@ const SettingsPage = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                     activeTab === tab.id
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md'
+                      ? 'bg-gradient-to-r from-primary-500 to-primary-700 text-white shadow-md'
                       : 'text-gray-600 hover:bg-gray-100'
                   }`}
                 >
@@ -129,7 +129,7 @@ const SettingsPage = () => {
                       type="text"
                       value={settings.systemName}
                       onChange={(e) => handleChange('systemName', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     />
                   </div>
 
@@ -146,7 +146,7 @@ const SettingsPage = () => {
                         onChange={(e) => handleChange('autoAssign', e.target.checked)}
                         className="sr-only peer"
                       />
-                      <div className="w-14 h-7 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600"></div>
+                      <div className="w-14 h-7 bg-gray-200 peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-600"></div>
                     </label>
                   </div>
 
@@ -163,7 +163,7 @@ const SettingsPage = () => {
                         onChange={(e) => handleChange('autoRefresh', e.target.checked)}
                         className="sr-only peer"
                       />
-                      <div className="w-14 h-7 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600"></div>
+                      <div className="w-14 h-7 bg-gray-200 peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-600"></div>
                     </label>
                   </div>
 
@@ -178,7 +178,7 @@ const SettingsPage = () => {
                       onChange={(e) => handleChange('refreshInterval', parseInt(e.target.value))}
                       min="3"
                       max="60"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     />
                   </div>
                 </div>
@@ -203,7 +203,7 @@ const SettingsPage = () => {
                         onChange={(e) => handleChange('emailNotifications', e.target.checked)}
                         className="sr-only peer"
                       />
-                      <div className="w-14 h-7 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600"></div>
+                      <div className="w-14 h-7 bg-gray-200 peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-600"></div>
                     </label>
                   </div>
 
@@ -219,7 +219,7 @@ const SettingsPage = () => {
                         onChange={(e) => handleChange('browserNotifications', e.target.checked)}
                         className="sr-only peer"
                       />
-                      <div className="w-14 h-7 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600"></div>
+                      <div className="w-14 h-7 bg-gray-200 peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-600"></div>
                     </label>
                   </div>
 
@@ -235,7 +235,7 @@ const SettingsPage = () => {
                         onChange={(e) => handleChange('soundNotifications', e.target.checked)}
                         className="sr-only peer"
                       />
-                      <div className="w-14 h-7 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600"></div>
+                      <div className="w-14 h-7 bg-gray-200 peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-600"></div>
                     </label>
                   </div>
 
@@ -251,7 +251,7 @@ const SettingsPage = () => {
                         onChange={(e) => handleChange('newTicketAlert', e.target.checked)}
                         className="sr-only peer"
                       />
-                      <div className="w-14 h-7 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600"></div>
+                      <div className="w-14 h-7 bg-gray-200 peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-600"></div>
                     </label>
                   </div>
                 </div>
@@ -272,7 +272,7 @@ const SettingsPage = () => {
                       type="text"
                       value={settings.whatsappPhone}
                       onChange={(e) => handleChange('whatsappPhone', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                       placeholder="7411024033"
                     />
                   </div>
@@ -285,7 +285,7 @@ const SettingsPage = () => {
                       type="text"
                       value={settings.whatsappAPIUrl}
                       onChange={(e) => handleChange('whatsappAPIUrl', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     />
                   </div>
 
@@ -297,12 +297,12 @@ const SettingsPage = () => {
                       type="text"
                       value={settings.verifyToken}
                       onChange={(e) => handleChange('verifyToken', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     />
                   </div>
 
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <p className="text-sm text-blue-800">
+                  <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
+                    <p className="text-sm text-primary-800">
                       <strong>Webhook URL:</strong> {window.location.origin}/webhook
                     </p>
                   </div>
@@ -328,7 +328,7 @@ const SettingsPage = () => {
                         onChange={(e) => handleChange('backupEnabled', e.target.checked)}
                         className="sr-only peer"
                       />
-                      <div className="w-14 h-7 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600"></div>
+                      <div className="w-14 h-7 bg-gray-200 peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-600"></div>
                     </label>
                   </div>
 
@@ -340,7 +340,7 @@ const SettingsPage = () => {
                       type="time"
                       value={settings.backupTime}
                       onChange={(e) => handleChange('backupTime', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     />
                   </div>
 
@@ -352,7 +352,7 @@ const SettingsPage = () => {
                       type="number"
                       value={settings.retentionDays}
                       onChange={(e) => handleChange('retentionDays', parseInt(e.target.value))}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     />
                   </div>
                 </div>

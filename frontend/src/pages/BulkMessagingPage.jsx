@@ -162,7 +162,7 @@ const BulkMessagingPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
       </div>
     );
   }
@@ -177,7 +177,7 @@ const BulkMessagingPage = () => {
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+          className="flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700"
         >
           <Plus className="w-5 h-5" />
           New Campaign
@@ -239,7 +239,7 @@ const BulkMessagingPage = () => {
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                   placeholder="e.g., Holiday Promotion 2024"
                   required
                 />
@@ -251,7 +251,7 @@ const BulkMessagingPage = () => {
                 <select
                   value={formData.templateId}
                   onChange={(e) => handleTemplateChange(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 >
                   <option value="">-- Select Template --</option>
                   {templates.map(t => (
@@ -266,7 +266,7 @@ const BulkMessagingPage = () => {
                 <textarea
                   value={formData.customMessage}
                   onChange={(e) => setFormData({ ...formData, customMessage: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                   rows="5"
                   placeholder="Hi {{name}}, we have a special offer for {{company}}..."
                   required
@@ -307,7 +307,7 @@ const BulkMessagingPage = () => {
                     <div className="text-center">
                       <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                       <label className="cursor-pointer">
-                        <span className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 inline-block">
+                        <span className="bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 inline-block">
                           Upload CSV File
                         </span>
                         <input
@@ -325,7 +325,7 @@ const BulkMessagingPage = () => {
                       <button
                         type="button"
                         onClick={downloadCSVTemplate}
-                        className="text-blue-600 text-sm mt-2 hover:underline flex items-center gap-1 mx-auto"
+                        className="text-primary-600 text-sm mt-2 hover:underline flex items-center gap-1 mx-auto"
                       >
                         <Download className="w-4 h-4" />
                         Download CSV Template
@@ -342,7 +342,7 @@ const BulkMessagingPage = () => {
                   type="datetime-local"
                   value={formData.scheduledFor}
                   onChange={(e) => setFormData({ ...formData, scheduledFor: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
                 <p className="text-sm text-gray-500 mt-1">Leave blank to send immediately</p>
               </div>
@@ -359,7 +359,7 @@ const BulkMessagingPage = () => {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+                  className="flex-1 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700"
                 >
                   Create Campaign
                 </button>
@@ -391,7 +391,7 @@ const BulkMessagingPage = () => {
             )}
             <button
               onClick={() => setShowPreview(false)}
-              className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="w-full px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
             >
               Close
             </button>

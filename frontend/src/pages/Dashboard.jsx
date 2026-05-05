@@ -65,8 +65,8 @@ const Dashboard = () => {
       title: 'View All Chats',
       description: 'See all customer conversations',
       icon: MessageSquare,
-      color: 'bg-blue-500',
-      hoverColor: 'hover:bg-blue-600',
+      color: 'bg-primary-600',
+      hoverColor: 'hover:bg-primary-700',
       onClick: () => navigate('/inbox')
     },
     {
@@ -105,8 +105,8 @@ const Dashboard = () => {
       title: 'Phone Numbers',
       description: 'Manage WhatsApp accounts',
       icon: Phone,
-      color: 'bg-indigo-500',
-      hoverColor: 'hover:bg-indigo-600',
+      color: 'bg-primary-700',
+      hoverColor: 'hover:bg-primary-800',
       onClick: () => navigate('/phone-numbers')
     }
   ];
@@ -115,7 +115,7 @@ const Dashboard = () => {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-500 mx-auto mb-4"></div>
           <p className="text-gray-600 font-medium">Loading dashboard...</p>
         </div>
       </div>
@@ -142,10 +142,10 @@ const Dashboard = () => {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {/* Total Chats */}
-        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
+        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-primary-500 hover:shadow-lg transition-shadow">
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <MessageSquare className="w-6 h-6 text-blue-600" />
+            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+              <MessageSquare className="w-6 h-6 text-primary-600" />
             </div>
           </div>
           <p className="text-gray-600 text-sm font-medium mb-1">Total Chats</p>
@@ -224,8 +224,8 @@ const Dashboard = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
-            <Phone className="w-10 h-10 text-blue-600 mx-auto mb-3" />
+          <div className="text-center p-6 bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl">
+            <Phone className="w-10 h-10 text-primary-600 mx-auto mb-3" />
             <p className="text-3xl font-bold text-gray-800">{stats.activePhones}</p>
             <p className="text-sm text-gray-600 font-medium mt-1">Active Phone Numbers</p>
           </div>

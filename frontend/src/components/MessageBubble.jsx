@@ -41,7 +41,7 @@ const MessageBubble = ({ message, isStaff }) => {
       <div
         className={`max-w-[70%] rounded-2xl px-4 py-3 ${
           isStaff
-            ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
+            ? 'bg-gradient-to-r from-primary-500 to-primary-700 text-white'
             : 'bg-white/90 text-gray-800 border border-gray-200'
         }`}
       >

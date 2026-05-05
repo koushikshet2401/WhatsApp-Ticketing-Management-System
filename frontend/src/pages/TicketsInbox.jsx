@@ -110,7 +110,7 @@ const TicketsInbox = () => {
 
   const getStatusColor = (status) => {
     const colors = {
-      open: 'bg-blue-100 text-blue-700',
+      open: 'bg-primary-100 text-primary-700',
       pending_reply: 'bg-yellow-100 text-yellow-700',
       no_reply: 'bg-orange-100 text-orange-700',
       closed: 'bg-green-100 text-green-700'
@@ -136,7 +136,7 @@ const TicketsInbox = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
       </div>
     );
   }
@@ -154,7 +154,7 @@ const TicketsInbox = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search tickets..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
         </div>
@@ -166,7 +166,7 @@ const TicketsInbox = () => {
               key={ticket.id}
               onClick={() => setSelectedTicket(ticket)}
               className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors ${
-                selectedTicket?.id === ticket.id ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
+                selectedTicket?.id === ticket.id ? 'bg-primary-50 border-l-4 border-l-primary-500' : ''
               }`}
             >
               <div className="flex items-start justify-between mb-2">
@@ -226,7 +226,7 @@ const TicketsInbox = () => {
                     className={`max-w-2xl rounded-lg p-4 ${
                       message.is_from_customer
                         ? 'bg-gray-100 text-gray-800'
-                        : 'bg-blue-600 text-white'
+                        : 'bg-primary-600 text-white'
                     }`}
                   >
                     {message.is_from_customer && (
@@ -235,7 +235,7 @@ const TicketsInbox = () => {
                       </p>
                     )}
                     <p className="whitespace-pre-wrap">{message.message_text}</p>
-                    <p className={`text-xs mt-2 ${message.is_from_customer ? 'text-gray-500' : 'text-blue-100'}`}>
+                    <p className={`text-xs mt-2 ${message.is_from_customer ? 'text-gray-500' : 'text-primary-100'}`}>
                       {new Date(message.created_at).toLocaleTimeString()}
                     </p>
                   </div>
@@ -322,13 +322,13 @@ const TicketsInbox = () => {
                     }
                   }}
                   placeholder="Type your message..."
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
                   rows="3"
                 />
                 <button
                   onClick={handleSendReply}
                   disabled={!replyText.trim()}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                  className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
                 >
                   <Send className="w-5 h-5" />
                   Send
@@ -357,7 +357,7 @@ const TicketsInbox = () => {
                 <select
                   value={selectedTicket.status}
                   onChange={(e) => handleStatusChange(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 >
                   <option value="open">Open</option>
                   <option value="pending_reply">Pending Reply</option>

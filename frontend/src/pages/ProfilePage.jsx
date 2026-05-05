@@ -77,7 +77,7 @@ const ProfilePage = () => {
           <div>
             <button
               onClick={() => navigate('/dashboard')}
-              className="text-blue-600 hover:text-blue-700 text-sm font-medium mb-2"
+              className="text-primary-600 hover:text-primary-700 text-sm font-medium mb-2"
             >
               ← Back to Dashboard
             </button>
@@ -96,7 +96,7 @@ const ProfilePage = () => {
               <button
                 onClick={handleSave}
                 disabled={loading}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all duration-200"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-700 text-white rounded-xl hover:shadow-lg transition-all duration-200"
               >
                 <Save className="w-5 h-5" />
                 <span>{loading ? 'Saving...' : 'Save Changes'}</span>
@@ -105,7 +105,7 @@ const ProfilePage = () => {
           ) : (
             <button
               onClick={() => setEditing(true)}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all duration-200"
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-700 text-white rounded-xl hover:shadow-lg transition-all duration-200"
             >
               <Edit2 className="w-5 h-5" />
               <span>Edit Profile</span>
@@ -120,7 +120,7 @@ const ProfilePage = () => {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center">
               {/* Avatar */}
-              <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-32 h-32 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center mx-auto mb-6">
                 <User className="w-16 h-16 text-white" />
               </div>
 
@@ -130,7 +130,7 @@ const ProfilePage = () => {
               </h2>
 
               {/* Role Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-medium mb-6">
                 <Award className="w-4 h-4" />
                 <span>Support Staff</span>
               </div>
@@ -173,7 +173,7 @@ const ProfilePage = () => {
                     onChange={(e) => setProfile({ ...profile, name: e.target.value })}
                     disabled={!editing}
                     className={`w-full px-4 py-3 border border-gray-300 rounded-lg ${
-                      editing ? 'focus:ring-2 focus:ring-blue-500' : 'bg-gray-50'
+                      editing ? 'focus:ring-2 focus:ring-primary-500' : 'bg-gray-50'
                     }`}
                   />
                 </div>
@@ -190,7 +190,7 @@ const ProfilePage = () => {
                     onChange={(e) => setProfile({ ...profile, email: e.target.value })}
                     disabled={!editing}
                     className={`w-full px-4 py-3 border border-gray-300 rounded-lg ${
-                      editing ? 'focus:ring-2 focus:ring-blue-500' : 'bg-gray-50'
+                      editing ? 'focus:ring-2 focus:ring-primary-500' : 'bg-gray-50'
                     }`}
                   />
                 </div>
@@ -207,7 +207,7 @@ const ProfilePage = () => {
                     onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                     disabled={!editing}
                     className={`w-full px-4 py-3 border border-gray-300 rounded-lg ${
-                      editing ? 'focus:ring-2 focus:ring-blue-500' : 'bg-gray-50'
+                      editing ? 'focus:ring-2 focus:ring-primary-500' : 'bg-gray-50'
                     }`}
                   />
                 </div>
@@ -220,13 +220,13 @@ const ProfilePage = () => {
               
               <div className="grid grid-cols-2 gap-6">
                 {/* Total Tickets */}
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6">
+                <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6">
                   <div className="flex items-center justify-between mb-2">
-                    <MessageSquare className="w-8 h-8 text-blue-600" />
-                    <TrendingUp className="w-5 h-5 text-blue-500" />
+                    <MessageSquare className="w-8 h-8 text-primary-600" />
+                    <TrendingUp className="w-5 h-5 text-primary-500" />
                   </div>
-                  <p className="text-3xl font-bold text-blue-700">{stats.totalTickets}</p>
-                  <p className="text-sm text-blue-600 mt-1">Total Tickets</p>
+                  <p className="text-3xl font-bold text-primary-700">{stats.totalTickets}</p>
+                  <p className="text-sm text-primary-600 mt-1">Total Tickets</p>
                 </div>
 
                 {/* Resolved */}
@@ -242,12 +242,12 @@ const ProfilePage = () => {
                 </div>
 
                 {/* Avg Response Time */}
-                <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <Clock className="w-8 h-8 text-purple-600" />
+                <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Clock className="w-8 h-8 text-primary-600" />
                   </div>
-                  <p className="text-3xl font-bold text-purple-700">{stats.avgResponseTime}</p>
-                  <p className="text-sm text-purple-600 mt-1">Avg Response</p>
+                  <p className="text-3xl font-bold text-primary-700">{stats.avgResponseTime}</p>
+                  <p className="text-sm text-primary-600 mt-1">Avg Response</p>
                 </div>
 
                 {/* Today Messages */}

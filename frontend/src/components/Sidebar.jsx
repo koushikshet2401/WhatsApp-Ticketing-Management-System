@@ -59,7 +59,7 @@ const Sidebar = ({ onTicketSelect, selectedTicketId }) => {
   // Get status badge color
   const getStatusBadge = (status) => {
     const badges = {
-      'open': { color: 'bg-blue-100 text-blue-600', label: 'Open' },
+      'open': { color: 'bg-primary-100 text-primary-600', label: 'Open' },
       'pending_reply': { color: 'bg-yellow-100 text-yellow-600', label: 'Pending' },
       'no_reply': { color: 'bg-red-100 text-red-600', label: 'No Reply' },
       'closed': { color: 'bg-gray-100 text-gray-600', label: 'Closed' }
@@ -90,7 +90,7 @@ const Sidebar = ({ onTicketSelect, selectedTicketId }) => {
             placeholder="Search tickets..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
         </div>
       </div>
@@ -101,7 +101,7 @@ const Sidebar = ({ onTicketSelect, selectedTicketId }) => {
           onClick={() => setFilter('all')}
           className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition ${
             filter === 'all'
-              ? 'bg-blue-500 text-white'
+              ? 'bg-primary-500 text-white'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
@@ -112,7 +112,7 @@ const Sidebar = ({ onTicketSelect, selectedTicketId }) => {
           onClick={() => setFilter('no_reply')}
           className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition ${
             filter === 'no_reply'
-              ? 'bg-blue-500 text-white'
+              ? 'bg-primary-500 text-white'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
@@ -123,7 +123,7 @@ const Sidebar = ({ onTicketSelect, selectedTicketId }) => {
           onClick={() => setFilter('pending_tasks')}
           className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition ${
             filter === 'pending_tasks'
-              ? 'bg-blue-500 text-white'
+              ? 'bg-primary-500 text-white'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
@@ -136,7 +136,7 @@ const Sidebar = ({ onTicketSelect, selectedTicketId }) => {
       <div className="flex-1 overflow-y-auto">
         {loading && filteredTickets.length === 0 ? (
           <div className="flex items-center justify-center h-full">
-            <RefreshCw className="w-8 h-8 text-blue-500 animate-spin" />
+            <RefreshCw className="w-8 h-8 text-primary-500 animate-spin" />
           </div>
         ) : filteredTickets.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-gray-400">
@@ -156,7 +156,7 @@ const Sidebar = ({ onTicketSelect, selectedTicketId }) => {
                   onClick={() => onTicketSelect(ticket)}
                   className={`p-4 rounded-lg cursor-pointer transition ${
                     isSelected
-                      ? 'bg-blue-50 border-2 border-blue-500'
+                      ? 'bg-primary-50 border-2 border-primary-500'
                       : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
                   }`}
                 >
