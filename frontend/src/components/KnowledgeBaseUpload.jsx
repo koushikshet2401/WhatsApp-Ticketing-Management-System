@@ -229,7 +229,7 @@ const KnowledgeBaseUpload = () => {
       </div>
 
       {/* Info Card */}
-      <div className="mt-10 p-5 bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl text-white shadow-lg">>
+      <div className="mt-10 p-5 bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl text-white shadow-lg">
         <h4 className="font-bold text-lg mb-2 flex items-center gap-2">
           <AlertCircle className="w-5 h-5" />
           AI Automation Active
