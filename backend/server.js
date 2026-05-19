@@ -10,12 +10,13 @@ const ticketRoutes = require('./routes/tickets');
 const messageRoutes = require('./routes/messages');
 const staffRoutes = require('./routes/staff');
 const taskRoutes = require('./routes/tasks');
-const analyticsRoutes = require('./routes/analytics');      // ← NEW
-const phoneRoutes = require('./routes/phones');             // ← NEW
-const templateRoutes = require('./routes/templates');       // ← NEW
-const contactRoutes = require('./routes/contacts');         // ← NEW
-const bulkMessageRoutes = require('./routes/bulkMessages'); 
+const analyticsRoutes = require('./routes/analytics');
+const phoneRoutes = require('./routes/phones');
+const templateRoutes = require('./routes/templates');
+const contactRoutes = require('./routes/contacts');
+const bulkMessageRoutes = require('./routes/bulkMessages');
 const kbRoutes = require('./routes/knowledgeBase');
+const testRoutes = require('./routes/test');  // ← ADD THIS LINE
 
 // Import database to test connection
 require('./config/database');
@@ -51,6 +52,7 @@ app.get('/', (req, res) => {
       messages: '/api/messages',
       staff: '/api/staff',
       tasks: '/api/tasks',
+      test: '/api/test',  // ← ADD THIS
       webhook: '/webhook'
     },
     documentation: {
@@ -85,6 +87,15 @@ app.get('/', (req, res) => {
         update: 'PUT /api/tasks/:id',
         updateStatus: 'PUT /api/tasks/:id/status',
         delete: 'DELETE /api/tasks/:id'
+      },
+      // ← ADD TEST ENDPOINTS DOCUMENTATION
+      test: {
+        health: 'GET /api/test/health',
+        mode: 'GET /api/test/mode',
+        connection: 'GET /api/test/whatsapp',
+        sendMessage: 'POST /api/test/whatsapp/send',
+        simulateIncoming: 'POST /api/test/whatsapp/simulate-incoming',
+        bulkSend: 'POST /api/test/whatsapp/bulk'
       }
     }
   });
@@ -97,12 +108,13 @@ app.use('/api/tickets', ticketRoutes);       // Ticket management
 app.use('/api/messages', messageRoutes);     // Message management
 app.use('/api/staff', staffRoutes);          // Staff management
 app.use('/api/tasks', taskRoutes);           // Task management
-app.use('/api/analytics', analyticsRoutes);           // ← NEW
-app.use('/api/phones', phoneRoutes);                  // ← NEW
-app.use('/api/templates', templateRoutes);            // ← NEW
-app.use('/api/contacts', contactRoutes);              // ← NEW
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/phones', phoneRoutes);
+app.use('/api/templates', templateRoutes);
+app.use('/api/contacts', contactRoutes);
 app.use('/api/bulk-messages', bulkMessageRoutes);
 app.use('/api/knowledge-base', kbRoutes);
+app.use('/api/test', testRoutes);            // ← ADD THIS LINE - Test routes
 
 // ==================== ERROR HANDLERS ====================
 
@@ -118,6 +130,7 @@ app.use((req, res) => {
       messages: '/api/messages/*',
       staff: '/api/staff/*',
       tasks: '/api/tasks/*',
+      test: '/api/test/*',  // ← ADD THIS
       webhook: '/webhook'
     }
   });
@@ -147,6 +160,7 @@ app.listen(PORT, () => {
   console.log(`💬 Messages API: http://localhost:${PORT}/api/messages`);
   console.log(`👥 Staff API: http://localhost:${PORT}/api/staff`);
   console.log(`✅ Tasks API: http://localhost:${PORT}/api/tasks`);
+  console.log(`🧪 Test API: http://localhost:${PORT}/api/test`);  // ← ADD THIS
   console.log('='.repeat(50));
 });
 

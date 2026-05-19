@@ -160,28 +160,40 @@ const TicketsInbox = () => {
         </div>
 
         {/* Ticket List */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2">
           {filteredTickets.map((ticket) => (
             <div
               key={ticket.id}
               onClick={() => setSelectedTicket(ticket)}
-              className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors ${
-                selectedTicket?.id === ticket.id ? 'bg-primary-50 border-l-4 border-l-primary-500' : ''
+              className={`p-4 rounded-xl ticket-item group transition-all ${
+                selectedTicket?.id === ticket.id 
+                  ? 'ticket-item-active' 
+                  : 'hover:bg-gray-50 border border-transparent'
               }`}
             >
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="font-semibold text-gray-800 flex-1 truncate">
+              <div className="flex items-start justify-between mb-1">
+                <h3 className={`font-semibold truncate flex-1 ${
+                  selectedTicket?.id === ticket.id ? 'text-primary-800' : 'text-gray-800'
+                }`}>
                   {ticket.group_name || ticket.title || 'Unnamed Ticket'}
                 </h3>
-                <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(ticket.status)}`}>
-                  {ticket.status}
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${getStatusColor(ticket.status)}`}>
+                  {ticket.status.replace('_', ' ')}
                 </span>
               </div>
               {ticket.description && (
-                <p className="text-sm text-gray-600 truncate mb-2">{ticket.description}</p>
+                <p className="text-sm text-gray-500 line-clamp-1 mb-2 group-hover:text-gray-600 transition-colors">
+                  {ticket.description}
+                </p>
               )}
-              <div className="flex items-center justify-between text-xs text-gray-500">
-                <span>{new Date(ticket.created_at).toLocaleDateString()}</span>
+              <div className="flex items-center justify-between text-[11px] text-gray-400">
+                <div className="flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  <span>{new Date(ticket.created_at).toLocaleDateString()}</span>
+                </div>
+                {selectedTicket?.id === ticket.id && (
+                  <div className="w-1.5 h-1.5 bg-primary-500 rounded-full animate-pulse" />
+                )}
               </div>
             </div>
           ))}
@@ -199,45 +211,59 @@ const TicketsInbox = () => {
         {selectedTicket ? (
           <>
             {/* Header */}
-            <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-              <div>
-                <h2 className="text-xl font-bold text-gray-800">
-                  {selectedTicket.group_name || selectedTicket.title || 'Conversation'}
-                </h2>
-                <p className="text-sm text-gray-500">{selectedTicket.group_id}</p>
+            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-white/80 backdrop-blur-sm sticky top-0 z-10">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-primary-100 rounded-2xl flex items-center justify-center text-primary-600 font-bold text-xl shadow-inner">
+                  {(selectedTicket.group_name || selectedTicket.title || 'C')[0].toUpperCase()}
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold text-gray-900 leading-tight">
+                    {selectedTicket.group_name || selectedTicket.title || 'Conversation'}
+                  </h2>
+                  <p className="text-xs text-gray-400 font-medium flex items-center gap-1">
+                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                    {selectedTicket.group_id}
+                  </p>
+                </div>
               </div>
               <button
                 onClick={loadTickets}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2.5 hover:bg-gray-100 rounded-xl transition-all active:scale-95 group"
+                title="Refresh Tickets"
               >
-                <RefreshCw className="w-5 h-5 text-gray-600" />
+                <RefreshCw className="w-5 h-5 text-gray-400 group-hover:text-primary-600 transition-colors" />
               </button>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6 bg-gray-50/30">
               {messages.map((message) => (
                 <div
                   key={message.id}
-                  className={`flex ${message.is_from_customer ? 'justify-start' : 'justify-end'} group relative`}
+                  className={`flex ${message.is_from_customer ? 'justify-start' : 'justify-end'} group relative message-bubble`}
                   onContextMenu={(e) => handleContextMenu(e, message)}
                 >
                   <div
-                    className={`max-w-2xl rounded-lg p-4 ${
+                    className={`max-w-[75%] rounded-2xl px-5 py-3.5 shadow-sm border ${
                       message.is_from_customer
-                        ? 'bg-gray-100 text-gray-800'
-                        : 'bg-primary-600 text-white'
+                        ? 'bg-white text-gray-800 border-gray-100 rounded-tl-none'
+                        : 'bg-primary-600 text-white border-primary-500 rounded-tr-none'
                     }`}
                   >
                     {message.is_from_customer && (
-                      <p className="text-xs font-semibold mb-1">
+                      <p className="text-[11px] font-bold text-primary-600 uppercase tracking-wider mb-1.5">
                         {message.sender_name || message.sender_phone}
                       </p>
                     )}
-                    <p className="whitespace-pre-wrap">{message.message_text}</p>
-                    <p className={`text-xs mt-2 ${message.is_from_customer ? 'text-gray-500' : 'text-primary-100'}`}>
-                      {new Date(message.created_at).toLocaleTimeString()}
-                    </p>
+                    <p className="text-[14px] leading-relaxed whitespace-pre-wrap">{message.message_text}</p>
+                    <div className={`flex items-center justify-end gap-1.5 mt-2 ${
+                      message.is_from_customer ? 'text-gray-400' : 'text-primary-100'
+                    }`}>
+                      <span className="text-[10px] font-medium">
+                        {new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                      {!message.is_from_customer && <CheckCircle className="w-3 h-3" />}
+                    </div>
                   </div>
 
                   {/* Message Actions Menu Button */}
@@ -310,98 +336,127 @@ const TicketsInbox = () => {
             </div>
 
             {/* Reply Box */}
-            <div className="p-4 border-t border-gray-200">
-              <div className="flex items-end gap-2">
-                <textarea
-                  value={replyText}
-                  onChange={(e) => setReplyText(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSendReply();
-                    }
-                  }}
-                  placeholder="Type your message..."
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
-                  rows="3"
-                />
+            <div className="p-4 bg-white border-t border-gray-100">
+              <div className="max-w-4xl mx-auto flex items-end gap-3">
+                <div className="flex-1 relative group">
+                  <textarea
+                    value={replyText}
+                    onChange={(e) => setReplyText(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendReply();
+                      }
+                    }}
+                    placeholder="Type your message..."
+                    className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:bg-white resize-none transition-all custom-scrollbar min-h-[56px] max-h-32"
+                    rows="1"
+                  />
+                </div>
                 <button
                   onClick={handleSendReply}
                   disabled={!replyText.trim()}
-                  className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                  className="p-4 bg-primary-600 text-white rounded-2xl hover:bg-primary-700 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95 flex items-center justify-center flex-shrink-0"
                 >
                   <Send className="w-5 h-5" />
-                  Send
                 </button>
               </div>
+              <p className="text-[10px] text-center text-gray-400 mt-2 font-medium">
+                Press Enter to send, Shift + Enter for new line
+              </p>
             </div>
           </>
         ) : (
-          <div className="flex-1 flex items-center justify-center text-gray-500">
-            <p>Select a ticket to view conversation</p>
+          <div className="flex-1 flex flex-col items-center justify-center text-gray-400 bg-gray-50/50">
+            <div className="w-20 h-20 bg-white rounded-3xl shadow-sm flex items-center justify-center mb-4">
+              <MessageSquare className="w-10 h-10 text-gray-200" />
+            </div>
+            <p className="font-medium">Select a ticket to view conversation</p>
           </div>
         )}
       </div>
 
       {/* RIGHT: Ticket Details */}
-      <div className="w-80 bg-white border-l border-gray-200 overflow-y-auto">
+      <div className="w-80 bg-white border-l border-gray-100 overflow-y-auto custom-scrollbar">
         {selectedTicket ? (
-          <div className="p-4">
+          <div className="p-6 space-y-8">
             {/* Overview */}
-            <div className="mb-6">
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Overview</h3>
+            <section>
+              <h3 className="section-header">
+                <ListTodo className="w-4 h-4" />
+                Overview
+              </h3>
               
-              {/* Status */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                <select
-                  value={selectedTicket.status}
-                  onChange={(e) => handleStatusChange(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                >
-                  <option value="open">Open</option>
-                  <option value="pending_reply">Pending Reply</option>
-                  <option value="no_reply">No Reply</option>
-                  <option value="closed">Closed</option>
-                </select>
-              </div>
-
-              {/* Created */}
-              <div className="text-sm text-gray-600 mb-2">
-                <span className="font-medium">Created:</span>{' '}
-                {new Date(selectedTicket.created_at).toLocaleString()}
-              </div>
-
-              {/* Last Message */}
-              {selectedTicket.last_message_at && (
-                <div className="text-sm text-gray-600">
-                  <span className="font-medium">Last Message:</span>{' '}
-                  {new Date(selectedTicket.last_message_at).toLocaleString()}
+              <div className="space-y-4 premium-card p-4">
+                {/* Status */}
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-tight mb-2">Current Status</label>
+                  <select
+                    value={selectedTicket.status}
+                    onChange={(e) => handleStatusChange(e.target.value)}
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400 text-sm font-medium transition-all"
+                  >
+                    <option value="open">Open</option>
+                    <option value="pending_reply">Pending Reply</option>
+                    <option value="no_reply">No Reply</option>
+                    <option value="closed">Closed</option>
+                  </select>
                 </div>
-              )}
-            </div>
+
+                <div className="pt-2 space-y-3">
+                  {/* Created */}
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-gray-400 font-medium italic">Created</span>
+                    <span className="text-gray-700 font-bold">{new Date(selectedTicket.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</span>
+                  </div>
+
+                  {/* Last Message */}
+                  {selectedTicket.last_message_at && (
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-400 font-medium italic">Last Activity</span>
+                      <span className="text-gray-700 font-bold">{new Date(selectedTicket.last_message_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
 
             {/* Open Tickets */}
-            <div className="mb-6">
-              <h3 className="text-lg font-bold text-gray-800 mb-2">Open Tickets</h3>
-              <p className="text-sm text-gray-500">No open tickets</p>
-            </div>
+            <section>
+              <h3 className="section-header">
+                <Clock className="w-4 h-4" />
+                Linked Tickets
+              </h3>
+              <div className="p-8 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                <p className="text-xs text-gray-400 font-medium">No linked tickets found</p>
+              </div>
+            </section>
 
             {/* Flagged Messages */}
-            <div className="mb-6">
-              <h3 className="text-lg font-bold text-gray-800 mb-2">Flagged Messages</h3>
-              <p className="text-sm text-gray-500">No flagged messages</p>
-            </div>
+            <section>
+              <h3 className="section-header">
+                <Flag className="w-4 h-4" />
+                Flagged Content
+              </h3>
+              <div className="p-8 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                <p className="text-xs text-gray-400 font-medium">No flagged messages</p>
+              </div>
+            </section>
 
             {/* Open Tasks */}
-            <div>
-              <h3 className="text-lg font-bold text-gray-800 mb-2">Open Tasks</h3>
-              <p className="text-sm text-gray-500">No open tasks</p>
-            </div>
+            <section>
+              <h3 className="section-header">
+                <CheckCircle className="w-4 h-4" />
+                Action Items
+              </h3>
+              <div className="p-8 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                <p className="text-xs text-gray-400 font-medium">No pending tasks</p>
+              </div>
+            </section>
           </div>
         ) : (
-          <div className="p-4 text-center text-gray-500">
-            <p>No ticket selected</p>
+          <div className="p-12 text-center text-gray-400">
+            <p className="text-sm font-medium">Select a ticket to see details</p>
           </div>
         )}
       </div>

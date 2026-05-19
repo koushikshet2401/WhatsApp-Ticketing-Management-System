@@ -142,51 +142,51 @@ const Dashboard = () => {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {/* Total Chats */}
-        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-primary-500 hover:shadow-lg transition-shadow">
+        <div className="premium-card p-6 border-l-4 border-primary-500">
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center shadow-inner">
               <MessageSquare className="w-6 h-6 text-primary-600" />
             </div>
           </div>
-          <p className="text-gray-600 text-sm font-medium mb-1">Total Chats</p>
-          <p className="text-4xl font-bold text-gray-800">{stats.totalChats}</p>
-          <p className="text-xs text-gray-500 mt-2">All conversations</p>
+          <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Total Chats</p>
+          <p className="text-4xl font-black text-gray-900">{stats.totalChats}</p>
+          <p className="text-xs text-gray-400 mt-2 font-medium">All conversations</p>
         </div>
 
         {/* Unread Chats */}
-        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-yellow-500 hover:shadow-lg transition-shadow">
+        <div className="premium-card p-6 border-l-4 border-yellow-500">
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-yellow-50 rounded-xl flex items-center justify-center shadow-inner">
               <AlertCircle className="w-6 h-6 text-yellow-600" />
             </div>
           </div>
-          <p className="text-gray-600 text-sm font-medium mb-1">Unread Chats</p>
-          <p className="text-4xl font-bold text-gray-800">{stats.unreadChats}</p>
-          <p className="text-xs text-gray-500 mt-2">Needs attention</p>
+          <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Unread Chats</p>
+          <p className="text-4xl font-black text-gray-900">{stats.unreadChats}</p>
+          <p className="text-xs text-gray-400 mt-2 font-medium">Needs attention</p>
         </div>
 
         {/* Open Tickets */}
-        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-orange-500 hover:shadow-lg transition-shadow">
+        <div className="premium-card p-6 border-l-4 border-orange-500">
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center shadow-inner">
               <Clock className="w-6 h-6 text-orange-600" />
             </div>
           </div>
-          <p className="text-gray-600 text-sm font-medium mb-1">Open Tickets</p>
-          <p className="text-4xl font-bold text-gray-800">{stats.openTickets}</p>
-          <p className="text-xs text-gray-500 mt-2">In progress</p>
+          <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Open Tickets</p>
+          <p className="text-4xl font-black text-gray-900">{stats.openTickets}</p>
+          <p className="text-xs text-gray-400 mt-2 font-medium">In progress</p>
         </div>
 
         {/* Total Messages */}
-        <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
+        <div className="premium-card p-6 border-l-4 border-green-500">
           <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center shadow-inner">
               <CheckCircle className="w-6 h-6 text-green-600" />
             </div>
           </div>
-          <p className="text-gray-600 text-sm font-medium mb-1">Total Messages</p>
-          <p className="text-4xl font-bold text-gray-800">{stats.totalMessages}</p>
-          <p className="text-xs text-gray-500 mt-2">All time</p>
+          <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Total Messages</p>
+          <p className="text-4xl font-black text-gray-900">{stats.totalMessages}</p>
+          <p className="text-xs text-gray-400 mt-2 font-medium">All time</p>
         </div>
       </div>
 
