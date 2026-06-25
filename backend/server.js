@@ -73,19 +73,19 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Health check
-app.get('/', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.json({
     status: 'running',
     message: 'WhatsApp Ticketing System API',
     version: '1.0.0',
     endpoints: {
-      health: '/',
+      health: '/api/health',
       auth: '/api/auth',
       tickets: '/api/tickets',
       messages: '/api/messages',
       staff: '/api/staff',
       tasks: '/api/tasks',
-      test: '/api/test',  // ← ADD THIS
+      test: '/api/test',
       webhook: '/webhook'
     },
     documentation: {
@@ -121,7 +121,6 @@ app.get('/', (req, res) => {
         updateStatus: 'PUT /api/tasks/:id/status',
         delete: 'DELETE /api/tasks/:id'
       },
-      // ← ADD TEST ENDPOINTS DOCUMENTATION
       test: {
         health: 'GET /api/test/health',
         mode: 'GET /api/test/mode',
