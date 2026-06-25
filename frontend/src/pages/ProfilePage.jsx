@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { User, Mail, Phone, Calendar, Award, MessageSquare, Clock, TrendingUp, Edit2, Save } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../services/api';
 
 const ProfilePage = () => {
   const navigate = useNavigate();

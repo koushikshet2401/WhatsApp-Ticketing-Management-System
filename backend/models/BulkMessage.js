@@ -3,12 +3,12 @@ const whatsappService = require('../services/whatsappService');
 
 class BulkMessage {
   // Get all bulk messages
-  static async getAll(filters = {}) {
+  static async getAll(filters = {}, companyId) {
     const { page = 1, limit = 20, status } = filters;
     const offset = (page - 1) * limit;
     
-    let query = 'SELECT * FROM bulk_messages WHERE 1=1';
-    const params = [];
+    let query = 'SELECT * FROM bulk_messages WHERE company_id = ?';
+    const params = [companyId];
     
     if (status) {
       query += ' AND status = ?';
@@ -23,28 +23,28 @@ class BulkMessage {
   }
 
   // Get by ID with recipients
-  static async getById(id) {
+  static async getById(id, companyId) {
     const [messages] = await db.execute(
       `SELECT bm.*, 
         (SELECT COUNT(*) FROM bulk_message_recipients WHERE bulk_message_id = bm.id) as total_recipients,
         (SELECT COUNT(*) FROM bulk_message_recipients WHERE bulk_message_id = bm.id AND status = 'sent') as sent_count,
         (SELECT COUNT(*) FROM bulk_message_recipients WHERE bulk_message_id = bm.id AND status = 'failed') as failed_count
        FROM bulk_messages bm
-       WHERE bm.id = ?`,
-      [id]
+       WHERE bm.id = ? AND bm.company_id = ?`,
+      [id, companyId]
     );
     return messages[0];
   }
 
   // Create bulk message
-  static async create(data) {
+  static async create(data, companyId) {
     const { name, messageContent, templateId, phoneNumberId, createdBy } = data;
     
     const [result] = await db.execute(
       `INSERT INTO bulk_messages 
-       (name, message_content, template_id, phone_number_id, created_by, status) 
-       VALUES (?, ?, ?, ?, ?, 'draft')`,
-      [name, messageContent, templateId, phoneNumberId, createdBy]
+       (name, message_content, template_id, phone_number_id, created_by, status, company_id) 
+       VALUES (?, ?, ?, ?, ?, 'draft', ?)`,
+      [name, messageContent, templateId, phoneNumberId, createdBy, companyId]
     );
 
     return result.insertId;
@@ -67,17 +67,17 @@ class BulkMessage {
   }
 
   // Send bulk message
-  static async send(id) {
+  static async send(id, companyId) {
     // Update status to sending
     await db.execute(
       `UPDATE bulk_messages 
        SET status = 'sending', started_at = NOW() 
-       WHERE id = ?`,
-      [id]
+       WHERE id = ? AND company_id = ?`,
+      [id, companyId]
     );
 
     // Get bulk message details
-    const bulkMessage = await this.getById(id);
+    const bulkMessage = await this.getById(id, companyId);
     
     // Get all pending recipients
     const [recipients] = await db.execute(
@@ -101,7 +101,8 @@ class BulkMessage {
         // Send via WhatsApp
         const response = await whatsappService.sendMessage(
           recipient.phone_number,
-          messageContent
+          messageContent,
+          companyId
         );
 
         // Update recipient status
@@ -135,8 +136,8 @@ class BulkMessage {
     await db.execute(
       `UPDATE bulk_messages 
        SET status = ?, sent_count = ?, failed_count = ?, completed_at = NOW() 
-       WHERE id = ?`,
-      [finalStatus, sentCount, failedCount, id]
+       WHERE id = ? AND company_id = ?`,
+      [finalStatus, sentCount, failedCount, id, companyId]
     );
 
     return {
@@ -147,28 +148,28 @@ class BulkMessage {
   }
 
   // Schedule bulk message
-  static async schedule(id, scheduledAt) {
+  static async schedule(id, scheduledAt, companyId) {
     await db.execute(
       `UPDATE bulk_messages 
        SET status = 'queued', scheduled_at = ? 
-       WHERE id = ?`,
-      [scheduledAt, id]
+       WHERE id = ? AND company_id = ?`,
+      [scheduledAt, id, companyId]
     );
   }
 
   // Cancel bulk message
-  static async cancel(id) {
+  static async cancel(id, companyId) {
     await db.execute(
       `UPDATE bulk_messages 
        SET status = 'draft' 
-       WHERE id = ? AND status IN ('queued', 'draft')`,
-      [id]
+       WHERE id = ? AND company_id = ? AND status IN ('queued', 'draft')`,
+      [id, companyId]
     );
   }
 
   // Delete bulk message
-  static async delete(id) {
-    await db.execute('DELETE FROM bulk_messages WHERE id = ?', [id]);
+  static async delete(id, companyId) {
+    await db.execute('DELETE FROM bulk_messages WHERE id = ? AND company_id = ?', [id, companyId]);
   }
 
   // Get recipient details
@@ -185,7 +186,7 @@ class BulkMessage {
   }
 
   // Get statistics
-  static async getStats() {
+  static async getStats(companyId) {
     const [stats] = await db.execute(`
       SELECT 
         COUNT(*) as total_campaigns,
@@ -194,7 +195,8 @@ class BulkMessage {
         SUM(failed_count) as total_failed,
         COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed_campaigns
       FROM bulk_messages
-    `);
+      WHERE company_id = ?
+    `, [companyId]);
     
     return stats[0];
   }

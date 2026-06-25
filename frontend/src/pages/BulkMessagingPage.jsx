@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Send, Upload, Eye, Calendar, Download, FileText, Plus } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const BulkMessagingPage = () => {
   const [campaigns, setCampaigns] = useState([]);
@@ -30,8 +30,8 @@ const BulkMessagingPage = () => {
   const loadData = async () => {
     try {
       const [campaignsRes, templatesRes] = await Promise.all([
-        axios.get('http://localhost:8080/api/bulk-messages'),
-        axios.get('http://localhost:8080/api/templates')
+        api.get(`/bulk-messages`),
+        api.get(`/templates`)
       ]);
       setCampaigns(campaignsRes.data.data || []);
       setTemplates(templatesRes.data.data || []);
@@ -143,7 +143,7 @@ const BulkMessagingPage = () => {
         ? csvContacts.map(c => c.phone)
         : formData.selectedContacts;
 
-      await axios.post('http://localhost:8080/api/bulk-messages', {
+      await api.post(`/bulk-messages`, {
         name: formData.name,
         message: formData.customMessage,
         recipients,

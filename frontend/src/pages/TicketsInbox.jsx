@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, RefreshCw, Send, MoreVertical, Flag, CheckCircle, Clock, X, Reply, Forward, ListTodo } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 import CreateTicketModal from '../components/CreateTicketModal';
 
 const TicketsInbox = () => {
@@ -27,7 +27,7 @@ const TicketsInbox = () => {
 
   const loadTickets = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/tickets');
+      const response = await api.get(`/tickets`);
       setTickets(response.data.data || []);
       if (response.data.data && response.data.data.length > 0) {
         setSelectedTicket(response.data.data[0]);
@@ -41,7 +41,7 @@ const TicketsInbox = () => {
 
   const loadMessages = async (ticketId) => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/messages/${ticketId}`);
+      const response = await api.get(`/messages/${ticketId}`);
       setMessages(response.data.data || []);
     } catch (error) {
       console.error('Error loading messages:', error);
@@ -53,7 +53,7 @@ const TicketsInbox = () => {
     if (!replyText.trim() || !selectedTicket) return;
 
     try {
-      await axios.post(`http://localhost:8080/api/messages/${selectedTicket.id}/reply`, {
+      await api.post(`/messages/${selectedTicket.id}/reply`, {
         messageText: replyText
       });
       setReplyText('');
@@ -68,7 +68,7 @@ const TicketsInbox = () => {
     if (!selectedTicket) return;
 
     try {
-      await axios.put(`http://localhost:8080/api/tickets/${selectedTicket.id}/status`, { status });
+      await api.put(`/tickets/${selectedTicket.id}/status`, { status });
       loadTickets();
       setSelectedTicket({ ...selectedTicket, status });
     } catch (error) {
@@ -92,7 +92,7 @@ const TicketsInbox = () => {
 
   const handleFlagMessage = async (message) => {
     try {
-      await axios.post(`http://localhost:8080/api/messages/${message.id}/flag`);
+      await api.post(`/messages/${message.id}/flag`);
       alert('Message flagged successfully!');
       setShowActionMenu(null);
       setContextMenuPosition(null);

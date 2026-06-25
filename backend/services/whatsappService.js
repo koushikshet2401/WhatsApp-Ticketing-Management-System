@@ -12,28 +12,46 @@ class WhatsAppService {
                        process.env.WHATSAPP_ACCESS_TOKEN === 'demo_access_token';
 
     this.apiUrl = process.env.WHATSAPP_API_URL || 'https://graph.facebook.com/v18.0';
-    this.phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
-    this.accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
 
     if (this.useSimulator) {
       console.log('🎭 WhatsApp Service: Running in SIMULATION MODE');
-      console.log('   To use real WhatsApp API, set USE_SIMULATOR=false in .env');
     } else {
-      console.log('📱 WhatsApp Service: Using REAL WhatsApp API');
-      console.log('   Phone Number ID:', this.phoneNumberId);
+      console.log('📱 WhatsApp Service: Using REAL WhatsApp API (Multi-Tenant)');
     }
   }
 
+  // Fetch dynamic credentials per company
+  async getCompanyCredentials(companyId) {
+    if (this.useSimulator) {
+      return {
+        phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID || 'simulator_phone_id',
+        accessToken: process.env.WHATSAPP_ACCESS_TOKEN || 'simulator_token'
+      };
+    }
+    const db = require('../config/database');
+    const [companies] = await db.execute('SELECT * FROM companies WHERE id = ?', [companyId]);
+    const company = companies[0];
+    if (!company) throw new Error('Company not found');
+    
+    // Fallback to .env if company credentials are not set (for backwards compatibility)
+    return {
+      phoneNumberId: company.whatsapp_phone_number_id || process.env.WHATSAPP_PHONE_NUMBER_ID,
+      accessToken: company.whatsapp_access_token || process.env.WHATSAPP_ACCESS_TOKEN
+    };
+  }
+
   // Send a text message
-  async sendMessage(to, message, ticketId = null) {
+  async sendMessage(to, message, companyId = 1) {
     try {
       // Use simulator if enabled
       if (this.useSimulator) {
         return await simulator.sendMessage(to, message);
       }
 
+      const creds = await this.getCompanyCredentials(companyId);
+
       // Use real WhatsApp API
-      const url = `${this.apiUrl}/${this.phoneNumberId}/messages`;
+      const url = `${this.apiUrl}/${creds.phoneNumberId}/messages`;
       
       const response = await axios.post(url, {
         messaging_product: 'whatsapp',
@@ -46,7 +64,7 @@ class WhatsAppService {
         }
       }, {
         headers: {
-          'Authorization': `Bearer ${this.accessToken}`,
+          'Authorization': `Bearer ${creds.accessToken}`,
           'Content-Type': 'application/json'
         }
       });
@@ -73,13 +91,14 @@ class WhatsAppService {
   }
 
   // Send a template message
-  async sendTemplate(to, templateName, languageCode = 'en', parameters = []) {
+  async sendTemplate(to, templateName, languageCode = 'en', parameters = [], companyId = 1) {
     try {
       if (this.useSimulator) {
         return await simulator.sendTemplate(to, templateName, parameters);
       }
 
-      const url = `${this.apiUrl}/${this.phoneNumberId}/messages`;
+      const creds = await this.getCompanyCredentials(companyId);
+      const url = `${this.apiUrl}/${creds.phoneNumberId}/messages`;
       
       const response = await axios.post(url, {
         messaging_product: 'whatsapp',
@@ -100,7 +119,7 @@ class WhatsAppService {
         }
       }, {
         headers: {
-          'Authorization': `Bearer ${this.accessToken}`,
+          'Authorization': `Bearer ${creds.accessToken}`,
           'Content-Type': 'application/json'
         }
       });
@@ -121,7 +140,7 @@ class WhatsAppService {
   }
 
   // Send bulk messages
-  async sendBulkMessages(recipients, message) {
+  async sendBulkMessages(recipients, message, companyId = 1) {
     if (this.useSimulator) {
       return await simulator.sendBulkMessages(recipients, message);
     }
@@ -133,7 +152,7 @@ class WhatsAppService {
       await this.delay(20);
       
       const personalizedMessage = this.replacePlaceholders(message, recipient);
-      const result = await this.sendMessage(recipient.phone, personalizedMessage);
+      const result = await this.sendMessage(recipient.phone, personalizedMessage, companyId);
       
       results.push({
         phone: recipient.phone,
@@ -154,13 +173,14 @@ class WhatsAppService {
   }
 
   // Send media (image, document, etc.)
-  async sendMedia(to, mediaType, mediaUrl, caption = null) {
+  async sendMedia(to, mediaType, mediaUrl, caption = null, companyId = 1) {
     try {
       if (this.useSimulator) {
         return await simulator.sendMessage(to, `[${mediaType.toUpperCase()}] ${caption || 'Media file'}`);
       }
 
-      const url = `${this.apiUrl}/${this.phoneNumberId}/messages`;
+      const creds = await this.getCompanyCredentials(companyId);
+      const url = `${this.apiUrl}/${creds.phoneNumberId}/messages`;
       
       const payload = {
         messaging_product: 'whatsapp',
@@ -178,7 +198,7 @@ class WhatsAppService {
 
       const response = await axios.post(url, payload, {
         headers: {
-          'Authorization': `Bearer ${this.accessToken}`,
+          'Authorization': `Bearer ${creds.accessToken}`,
           'Content-Type': 'application/json'
         }
       });
@@ -199,14 +219,15 @@ class WhatsAppService {
   }
 
   // Mark message as read
-  async markAsRead(messageId) {
+  async markAsRead(messageId, companyId = 1) {
     try {
       if (this.useSimulator) {
         console.log('✓ [SIMULATOR] Message marked as read:', messageId);
         return { success: true };
       }
 
-      const url = `${this.apiUrl}/${this.phoneNumberId}/messages`;
+      const creds = await this.getCompanyCredentials(companyId);
+      const url = `${this.apiUrl}/${creds.phoneNumberId}/messages`;
       
       await axios.post(url, {
         messaging_product: 'whatsapp',
@@ -214,7 +235,7 @@ class WhatsAppService {
         message_id: messageId
       }, {
         headers: {
-          'Authorization': `Bearer ${this.accessToken}`,
+          'Authorization': `Bearer ${creds.accessToken}`,
           'Content-Type': 'application/json'
         }
       });
@@ -337,7 +358,7 @@ class WhatsAppService {
   }
 
   // Test connection
-  async testConnection() {
+  async testConnection(companyId = 1) {
     try {
       if (this.useSimulator) {
         console.log('✓ Simulator mode active - connection OK');
@@ -348,11 +369,13 @@ class WhatsAppService {
         };
       }
 
+      const creds = await this.getCompanyCredentials(companyId);
+
       // Test real API connection
-      const url = `${this.apiUrl}/${this.phoneNumberId}`;
+      const url = `${this.apiUrl}/${creds.phoneNumberId}`;
       const response = await axios.get(url, {
         headers: {
-          'Authorization': `Bearer ${this.accessToken}`
+          'Authorization': `Bearer ${creds.accessToken}`
         }
       });
 

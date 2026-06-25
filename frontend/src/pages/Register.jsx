@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, AlertCircle, Phone, Lock, Mail, User } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const Register = () => {
   const [formData, setFormData] = useState({
+    companyName: '',
     name: '',
     email: '',
     phone: '',
@@ -40,7 +41,8 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:8080/api/auth/register', {
+      const response = await api.post(`/auth/register`, {
+        companyName: formData.companyName.trim(),
         name: formData.name.trim(),
         email: formData.email.trim(),
         phone: formData.phone.trim(),
@@ -72,14 +74,35 @@ const Register = () => {
             <Phone className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            Create Account
+            Create Business Account
           </h1>
-          <p className="text-gray-600">Register as a support staff member</p>
+          <p className="text-gray-600">Register your company and start managing WhatsApp tickets</p>
         </div>
 
         {/* Register Form */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <form onSubmit={handleRegister} className="space-y-5">
+            {/* Company Name Input */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Company Name
+              </label>
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 flex items-center justify-center">
+                  🏢
+                </div>
+                <input
+                  type="text"
+                  name="companyName"
+                  value={formData.companyName}
+                  onChange={handleChange}
+                  placeholder="Acme Corp"
+                  className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  required
+                  minLength={2}
+                />
+              </div>
+            </div>
             {/* Name Input */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">

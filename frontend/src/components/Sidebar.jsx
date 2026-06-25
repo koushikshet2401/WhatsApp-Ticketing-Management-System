@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, RefreshCw, MessageSquare, Clock, CheckCircle } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const Sidebar = ({ onTicketSelect, selectedTicketId }) => {
   const [tickets, setTickets] = useState([]);
@@ -20,7 +20,7 @@ const Sidebar = ({ onTicketSelect, selectedTicketId }) => {
   const loadTickets = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:8080/api/tickets?filter=${filter}`);
+      const response = await api.get(`/tickets?filter=${filter}`);
       
       console.log('API Response:', response.data); // Debug log
       

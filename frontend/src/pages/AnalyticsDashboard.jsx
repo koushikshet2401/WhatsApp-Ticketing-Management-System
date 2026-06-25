@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { MessageSquare, Users, TrendingUp, Clock, Phone, CheckCircle, AlertCircle } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const AnalyticsDashboard = () => {
   const [stats, setStats] = useState({
@@ -30,11 +30,11 @@ const AnalyticsDashboard = () => {
   const loadAnalytics = async () => {
     try {
       // Load statistics
-      const statsRes = await axios.get('http://localhost:8080/api/analytics/stats');
+      const statsRes = await api.get(`/analytics/stats`);
       setStats(statsRes.data.data);
 
       // Load chart data
-      const chartsRes = await axios.get('http://localhost:8080/api/analytics/charts');
+      const chartsRes = await api.get(`/analytics/charts`);
       setChartData(chartsRes.data.data);
       
       setLoading(false);

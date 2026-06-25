@@ -1,16 +1,22 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, adminOnly = false }) => {
   const token = localStorage.getItem('token');
+  const userStr = localStorage.getItem('user');
   
-  if (!token) {
-    // Not logged in, redirect to login
+  if (!token || !userStr) {
     return <Navigate to="/login" replace />;
   }
-  
-  // Logged in, show the protected content
-  return children;
+
+  const user = JSON.parse(userStr);
+
+  if (adminOnly && user.role !== 'admin') {
+    // Redirect non-admins away from admin-only routes
+    return <Navigate to="/inbox" replace />;
+  }
+
+  return children ? children : <Outlet />;
 };
 
 export default ProtectedRoute;

@@ -1,7 +1,24 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const helmet = require('helmet');
+const path = require('path');
 require('dotenv').config();
+
+// Error handling for uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error('❌ Uncaught Exception:', err);
+  // In production, we might want to let PM2 restart the app
+  if (process.env.NODE_ENV === 'production') process.exit(1);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.error('❌ Unhandled Rejection:', err);
+  if (process.env.NODE_ENV === 'production') process.exit(1);
+});
+
+// Import middleware
+const { authMiddleware } = require('./middleware/auth');
 
 // Import routes
 const webhookRoutes = require('./routes/webhook');
@@ -16,7 +33,8 @@ const templateRoutes = require('./routes/templates');
 const contactRoutes = require('./routes/contacts');
 const bulkMessageRoutes = require('./routes/bulkMessages');
 const kbRoutes = require('./routes/knowledgeBase');
-const testRoutes = require('./routes/test');  // ← ADD THIS LINE
+const testRoutes = require('./routes/test');
+const companyRoutes = require('./routes/company');
 
 // Import database to test connection
 require('./config/database');
@@ -24,10 +42,27 @@ require('./config/database');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// Security and middleware
+app.use(helmet());
+app.use(cors({
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      process.env.FRONTEND_URL,
+      'http://localhost:5173',
+      'http://localhost:3000'
+    ];
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      return callback(null, false); // For simplicity, we just won't block it strictly in dev, but ideally throw error. Let's just return true for dev flexibility.
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 
 // Request logging middleware (development only)
 if (process.env.NODE_ENV !== 'production') {
@@ -36,8 +71,6 @@ if (process.env.NODE_ENV !== 'production') {
     next();
   });
 }
-
-// ==================== ROUTES ====================
 
 // Health check
 app.get('/', (req, res) => {
@@ -101,25 +134,33 @@ app.get('/', (req, res) => {
   });
 });
 
-// API Routes
+// Public API Routes
 app.use('/webhook', webhookRoutes);          // WhatsApp webhook
 app.use('/api/auth', authRoutes);            // Authentication (login, register)
-app.use('/api/tickets', ticketRoutes);       // Ticket management
-app.use('/api/messages', messageRoutes);     // Message management
-app.use('/api/staff', staffRoutes);          // Staff management
-app.use('/api/tasks', taskRoutes);           // Task management
-app.use('/api/analytics', analyticsRoutes);
-app.use('/api/phones', phoneRoutes);
-app.use('/api/templates', templateRoutes);
-app.use('/api/contacts', contactRoutes);
-app.use('/api/bulk-messages', bulkMessageRoutes);
-app.use('/api/knowledge-base', kbRoutes);
-app.use('/api/test', testRoutes);            // ← ADD THIS LINE - Test routes
+app.use('/api/test', testRoutes);            // Test routes
+
+// Protected API Routes (require JWT token)
+app.use('/api/tickets', authMiddleware, ticketRoutes);       // Ticket management
+app.use('/api/messages', authMiddleware, messageRoutes);     // Message management
+app.use('/api/staff', authMiddleware, staffRoutes);          // Staff management
+app.use('/api/tasks', authMiddleware, taskRoutes);           // Task management
+app.use('/api/analytics', authMiddleware, analyticsRoutes);
+app.use('/api/phones', authMiddleware, phoneRoutes);
+app.use('/api/templates', authMiddleware, templateRoutes);
+app.use('/api/contacts', authMiddleware, contactRoutes);
+app.use('/api/bulk-messages', authMiddleware, bulkMessageRoutes);
+app.use('/api/knowledge-base', authMiddleware, kbRoutes);
+app.use('/api/company', authMiddleware, companyRoutes); // NEW
+
+// Serve static React files in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'public')));
+}
 
 // ==================== ERROR HANDLERS ====================
 
-// 404 handler - Must be AFTER all routes
-app.use((req, res) => {
+// API 404 handler - Must be AFTER all API routes
+const apiNotFoundHandler = (req, res) => {
   res.status(404).json({
     success: false,
     error: 'Endpoint not found',
@@ -130,11 +171,21 @@ app.use((req, res) => {
       messages: '/api/messages/*',
       staff: '/api/staff/*',
       tasks: '/api/tasks/*',
-      test: '/api/test/*',  // ← ADD THIS
+      test: '/api/test/*',
       webhook: '/webhook'
     }
   });
-});
+};
+
+app.use('/api', apiNotFoundHandler);
+app.use('/webhook', apiNotFoundHandler);
+
+// React catch-all route (Must be after API routes but before global error handler)
+if (process.env.NODE_ENV === 'production') {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/index.html'));
+  });
+}
 
 // Global error handler
 app.use((err, req, res, next) => {

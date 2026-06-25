@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, AlertCircle, Loader2, User, RefreshCw } from 'lucide-react';
 import MessageBubble from './MessageBubble';
-import axios from 'axios';
+import api from '../services/api';
 
 const ChatWindow = ({ ticket, onMessageSent }) => {
   const [messages, setMessages] = useState([]);
@@ -51,7 +51,7 @@ const ChatWindow = ({ ticket, onMessageSent }) => {
 
   const loadStaff = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/staff');
+      const response = await api.get(`/staff`);
       if (response.data.success) {
         setStaff(response.data.data || []);
       }
@@ -64,7 +64,7 @@ const ChatWindow = ({ ticket, onMessageSent }) => {
     if (!ticket) return;
     
     try {
-      const response = await axios.get(`http://localhost:8080/api/tickets/${ticket.id}/staff`);
+      const response = await api.get(`/tickets/${ticket.id}/staff`);
       if (response.data.success && response.data.data.length > 0) {
         setAssignedStaff(response.data.data[0].id.toString());
       } else {
@@ -85,7 +85,7 @@ const ChatWindow = ({ ticket, onMessageSent }) => {
     try {
       console.log(`📥 Loading messages for ticket ${ticket.id}`);
       
-      const response = await axios.get(`http://localhost:8080/api/messages/${ticket.id}`);
+      const response = await api.get(`/messages/${ticket.id}`);
       
       console.log('Messages API response:', response.data);
       
@@ -120,8 +120,8 @@ const ChatWindow = ({ ticket, onMessageSent }) => {
       
       console.log(`📤 Sending message to ticket ${ticket.id}`);
       
-      const response = await axios.post(
-        `http://localhost:8080/api/messages/${ticket.id}/reply`,
+      const response = await api.post(
+        `/messages/${ticket.id}/reply`,
         {
           message: newMessage.trim(),
           staffName: staffName
@@ -153,7 +153,7 @@ const ChatWindow = ({ ticket, onMessageSent }) => {
 
     setAssigning(true);
     try {
-      const response = await axios.post('http://localhost:8080/api/tickets/assign', {
+      const response = await api.post(`/tickets/assign`, {
         ticketId: ticket.id,
         staffId: parseInt(staffId)
       });

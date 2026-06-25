@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Plus, Edit2, Trash2, Tag, X, Filter } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const ContactsPage = () => {
   const [contacts, setContacts] = useState([]);
@@ -36,7 +36,7 @@ const ContactsPage = () => {
 
   const loadContacts = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/contacts');
+      const response = await api.get(`/contacts`);
       setContacts(response.data.data || []);
       setLoading(false);
     } catch (error) {
@@ -66,9 +66,9 @@ const ContactsPage = () => {
     e.preventDefault();
     try {
       if (editingContact) {
-        await axios.put(`http://localhost:8080/api/contacts/${editingContact.id}`, formData);
+        await api.put(`/contacts/${editingContact.id}`, formData);
       } else {
-        await axios.post('http://localhost:8080/api/contacts', formData);
+        await api.post(`/contacts`, formData);
       }
       setShowModal(false);
       loadContacts();
@@ -82,7 +82,7 @@ const ContactsPage = () => {
   const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to delete this contact?')) return;
     try {
-      await axios.delete(`http://localhost:8080/api/contacts/${id}`);
+      await api.delete(`/contacts/${id}`);
       loadContacts();
       alert('Contact deleted successfully!');
     } catch (error) {
@@ -99,7 +99,7 @@ const ContactsPage = () => {
   const handleAddLabel = async (labelName) => {
     if (!labelContact) return;
     try {
-      await axios.post(`http://localhost:8080/api/contacts/${labelContact.id}/labels`, {
+      await api.post(`/contacts/${labelContact.id}/labels`, {
         label: labelName
       });
       loadContacts();
@@ -114,7 +114,7 @@ const ContactsPage = () => {
 
   const handleRemoveLabel = async (contactId, labelName) => {
     try {
-      await axios.delete(`http://localhost:8080/api/contacts/${contactId}/labels/${labelName}`);
+      await api.delete(`/contacts/${contactId}/labels/${labelName}`);
       loadContacts();
       alert('Label removed successfully!');
     } catch (error) {

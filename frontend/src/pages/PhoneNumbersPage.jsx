@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Phone, Plus, Edit2, Trash2, Check, X, Power } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const PhoneNumbersPage = () => {
   const [phones, setPhones] = useState([]);
@@ -21,7 +21,7 @@ const PhoneNumbersPage = () => {
 
   const loadPhones = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/phones');
+      const response = await api.get(`/phones`);
       setPhones(response.data.data || []);
       setLoading(false);
     } catch (error) {
@@ -57,9 +57,9 @@ const PhoneNumbersPage = () => {
     
     try {
       if (editingPhone) {
-        await axios.put(`http://localhost:8080/api/phones/${editingPhone.id}`, formData);
+        await api.put(`/phones/${editingPhone.id}`, formData);
       } else {
-        await axios.post('http://localhost:8080/api/phones', formData);
+        await api.post(`/phones`, formData);
       }
       
       setShowModal(false);
@@ -75,7 +75,7 @@ const PhoneNumbersPage = () => {
     if (!confirm('Are you sure you want to delete this phone number?')) return;
     
     try {
-      await axios.delete(`http://localhost:8080/api/phones/${id}`);
+      await api.delete(`/phones/${id}`);
       loadPhones();
       alert('Phone number deleted successfully!');
     } catch (error) {
@@ -86,7 +86,7 @@ const PhoneNumbersPage = () => {
 
   const handleToggleActive = async (phone) => {
     try {
-      await axios.patch(`http://localhost:8080/api/phones/${phone.id}/toggle`);
+      await api.patch(`/phones/${phone.id}/toggle`);
       loadPhones();
     } catch (error) {
       console.error('Error toggling phone:', error);

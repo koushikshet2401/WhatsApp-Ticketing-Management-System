@@ -8,6 +8,15 @@ class MessageController {
     try {
       const { ticketId } = req.params;
 
+      // Verify ticket belongs to the user's company
+      const ticket = await Ticket.getById(ticketId, req.user.companyId);
+      if (!ticket) {
+        return res.status(404).json({
+          success: false,
+          error: 'Ticket not found or unauthorized'
+        });
+      }
+
       const messages = await Message.getByTicketId(ticketId);
 
       res.json({
@@ -37,8 +46,8 @@ class MessageController {
         });
       }
 
-      // Get ticket
-      const ticket = await Ticket.getById(ticketId);
+      // Get ticket and verify ownership
+      const ticket = await Ticket.getById(ticketId, req.user.companyId);
       if (!ticket) {
         return res.status(404).json({
           success: false,
@@ -60,7 +69,7 @@ class MessageController {
       }
 
       // Send via WhatsApp API
-      const whatsappResponse = await WhatsAppService.sendMessage(recipientId, message.trim());
+      const whatsappResponse = await WhatsAppService.sendMessage(recipientId, message.trim(), req.user.companyId);
 
       // Save reply to database
       const messageId = whatsappResponse.messages?.[0]?.id || `msg_${Date.now()}`;
@@ -75,7 +84,7 @@ class MessageController {
       });
 
       // Update ticket status
-      await Ticket.updateStatus(ticketId, 'open');
+      await Ticket.updateStatus(ticketId, 'open', req.user.companyId);
 
       res.json({
         success: true,

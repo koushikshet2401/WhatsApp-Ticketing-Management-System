@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MessageSquare, Plus, Edit2, Trash2, Copy, TrendingUp } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const TemplatesPage = () => {
   const [templates, setTemplates] = useState([]);
@@ -22,7 +22,7 @@ const TemplatesPage = () => {
 
   const loadTemplates = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/templates');
+      const response = await api.get(`/templates`);
       setTemplates(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -53,9 +53,9 @@ const TemplatesPage = () => {
     
     try {
       if (editingTemplate) {
-        await axios.put(`http://localhost:8080/api/templates/${editingTemplate.id}`, formData);
+        await api.put(`/templates/${editingTemplate.id}`, formData);
       } else {
-        await axios.post('http://localhost:8080/api/templates', formData);
+        await api.post(`/templates`, formData);
       }
       
       setShowModal(false);
@@ -70,7 +70,7 @@ const TemplatesPage = () => {
     if (!confirm('Are you sure you want to delete this template?')) return;
     
     try {
-      await axios.delete(`http://localhost:8080/api/templates/${id}`);
+      await api.delete(`/templates/${id}`);
       loadTemplates();
     } catch (error) {
       console.error('Error deleting template:', error);
@@ -89,7 +89,7 @@ const TemplatesPage = () => {
         if (value) variables[key] = value;
       });
 
-      const response = await axios.post(`http://localhost:8080/api/templates/${template.id}/use`, { variables });
+      const response = await api.post(`/templates/${template.id}/use`, { variables });
       
       // Copy to clipboard
       navigator.clipboard.writeText(response.data.data.message);

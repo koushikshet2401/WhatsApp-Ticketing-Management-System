@@ -5,7 +5,8 @@ class StaffController {
   static async getAll(req, res) {
     try {
       const [staff] = await db.execute(
-        'SELECT id, name, email, phone, is_active, created_at FROM staff WHERE is_active = TRUE ORDER BY name ASC'
+        'SELECT id, name, email, phone, is_active, created_at, role FROM staff WHERE is_active = TRUE AND company_id = ? ORDER BY name ASC',
+        [req.user.companyId]
       );
       
       res.json({
@@ -35,8 +36,8 @@ class StaffController {
       }
 
       const [result] = await db.execute(
-        'INSERT INTO staff (name, email, phone) VALUES (?, ?, ?)',
-        [name, email, phone]
+        'INSERT INTO staff (name, email, phone, company_id, role, password) VALUES (?, ?, ?, ?, ?, ?)',
+        [name, email, phone, req.user.companyId, 'agent', '$2b$10$K7L1OJ45M7fRj1nH5.DsE.sFzZpG3EbZ0yLJp7QZp5L8XRZ0jKB3e'] // Default 'password123'
       );
 
       res.json({
@@ -63,8 +64,8 @@ class StaffController {
       const { id } = req.params;
 
       const [staff] = await db.execute(
-        'SELECT id, name, email, phone, is_active FROM staff WHERE id = ?',
-        [id]
+        'SELECT id, name, email, phone, is_active, role FROM staff WHERE id = ? AND company_id = ?',
+        [id, req.user.companyId]
       );
 
       if (staff.length === 0) {

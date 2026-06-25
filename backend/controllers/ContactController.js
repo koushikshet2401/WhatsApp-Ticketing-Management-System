@@ -12,7 +12,7 @@ class ContactController {
         search,
         label,
         phoneNumberId
-      });
+      }, req.user.companyId);
 
       res.json({
         success: true,
@@ -35,7 +35,7 @@ class ContactController {
   // Get contact by ID
   static async getById(req, res) {
     try {
-      const contact = await Contact.getById(req.params.id);
+      const contact = await Contact.getById(req.params.id, req.user.companyId);
       
       if (!contact) {
         return res.status(404).json({
@@ -71,7 +71,7 @@ class ContactController {
       }
 
       // Check if contact already exists
-      const existing = await Contact.getByPhone(phoneNumber);
+      const existing = await Contact.getByPhone(phoneNumber, req.user.companyId);
       if (existing) {
         return res.status(400).json({
           success: false,
@@ -87,7 +87,7 @@ class ContactController {
         labels,
         notes,
         phoneNumberId
-      });
+      }, req.user.companyId);
 
       res.status(201).json({
         success: true,
@@ -114,7 +114,7 @@ class ContactController {
         company,
         labels,
         notes
-      });
+      }, req.user.companyId);
 
       res.json({
         success: true,
@@ -141,7 +141,7 @@ class ContactController {
         });
       }
 
-      await Contact.addLabel(req.params.id, label);
+      await Contact.addLabel(req.params.id, label, req.user.companyId);
 
       res.json({
         success: true,
@@ -168,7 +168,7 @@ class ContactController {
         });
       }
 
-      await Contact.removeLabel(req.params.id, label);
+      await Contact.removeLabel(req.params.id, label, req.user.companyId);
 
       res.json({
         success: true,
@@ -186,7 +186,7 @@ class ContactController {
   // Toggle block status
   static async toggleBlock(req, res) {
     try {
-      await Contact.toggleBlock(req.params.id);
+      await Contact.toggleBlock(req.params.id, req.user.companyId);
 
       res.json({
         success: true,
@@ -204,7 +204,7 @@ class ContactController {
   // Delete contact
   static async delete(req, res) {
     try {
-      await Contact.delete(req.params.id);
+      await Contact.delete(req.params.id, req.user.companyId);
 
       res.json({
         success: true,
@@ -231,7 +231,7 @@ class ContactController {
         });
       }
 
-      const results = await Contact.bulkImport(contacts, phoneNumberId);
+      const results = await Contact.bulkImport(contacts, phoneNumberId, req.user.companyId);
 
       res.json({
         success: true,
@@ -250,7 +250,7 @@ class ContactController {
   // Get contact statistics
   static async getStats(req, res) {
     try {
-      const stats = await Contact.getStats();
+      const stats = await Contact.getStats(req.user.companyId);
 
       res.json({
         success: true,

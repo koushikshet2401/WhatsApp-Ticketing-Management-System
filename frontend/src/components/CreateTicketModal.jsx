@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Tag } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const CreateTicketModal = ({ message, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -18,7 +18,7 @@ const CreateTicketModal = ({ message, onClose, onSuccess }) => {
     e.preventDefault();
     
     try {
-      await axios.post('http://localhost:8080/api/tickets', {
+      await api.post(`/tickets`, {
         ...formData,
         group_id: message?.ticket_id || `ticket_${Date.now()}`,
         group_name: formData.title

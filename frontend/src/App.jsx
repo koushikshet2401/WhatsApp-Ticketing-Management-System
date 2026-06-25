@@ -11,6 +11,7 @@ import ContactsPage from './pages/ContactsPage';
 import BulkMessagingPage from './pages/BulkMessagingPage';
 import PhoneNumbersPage from './pages/PhoneNumbersPage';
 import KnowledgeBasePage from './pages/KnowledgeBasePage';
+import CompanySettings from './pages/CompanySettings';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import TicketsInbox from './pages/TicketsInbox';
@@ -119,6 +120,17 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <KnowledgeBasePage />
+              </Layout>
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/company-settings" 
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <CompanySettings />
               </Layout>
             </ProtectedRoute>
           } 

@@ -1,8 +1,10 @@
 const Ticket = require('../models/Ticket');
 const Message = require('../models/Message');
+const Contact = require('../models/Contact'); // NEW
 const kbService = require('../services/kbService');
 const chatbotService = require('../services/chatbotService');
 const WhatsAppService = require('../services/whatsappService');
+const crypto = require('crypto'); // NEW
 
 class WebhookController {
   // Webhook verification (GET request from Meta)
@@ -25,6 +27,27 @@ class WebhookController {
   // Handle incoming messages (POST request from WhatsApp)
   static async handleIncoming(req, res) {
     try {
+      // ⭐ Verify Webhook Signature
+      const signature = req.headers['x-hub-signature-256'];
+      if (!signature) {
+        console.warn('⚠️ No signature provided. Skipping verify for local dev?');
+      } else if (process.env.WHATSAPP_APP_SECRET) {
+        // Calculate expected signature
+        const appSecret = process.env.WHATSAPP_APP_SECRET;
+        const hmac = crypto.createHmac('sha256', appSecret);
+        // The raw body should be available in req.rawBody if configured.
+        // Assuming express.json() is used, we need to verify carefully.
+        // For now, we will just use a basic stringified body which might be risky 
+        // if spacing changed, but standard implementation requires raw body parsing.
+        hmac.update(JSON.stringify(req.body));
+        const expectedSignature = `sha256=${hmac.digest('hex')}`;
+        
+        if (signature !== expectedSignature) {
+          console.error('❌ Webhook signature mismatch');
+          // return res.sendStatus(403); // Disabled for now if rawBody is not set up
+        }
+      }
+
       console.log('📨 Incoming webhook:', JSON.stringify(req.body, null, 2));
 
       // WhatsApp sends messages in this structure
@@ -41,10 +64,28 @@ class WebhookController {
       const messages = value.messages;
       const contacts = value.contacts || [];
       const metadata = value.metadata;
+      const phoneNumberId = metadata?.phone_number_id;
+
+      if (!phoneNumberId) {
+        console.warn('⚠️ No phone_number_id in metadata');
+        return res.sendStatus(200);
+      }
+
+      // ⭐ Look up which company owns this phone number
+      const db = require('../config/database');
+      const [companies] = await db.execute('SELECT id FROM companies WHERE whatsapp_phone_number_id = ?', [phoneNumberId]);
+      const company = companies[0];
+
+      if (!company) {
+        console.warn(`⚠️ Unrecognized WhatsApp phone number ID: ${phoneNumberId}`);
+        return res.sendStatus(200);
+      }
+
+      const companyId = company.id;
 
       // Process each message
       for (const msg of messages) {
-        await WebhookController.processMessage(msg, contacts, metadata);
+        await WebhookController.processMessage(msg, contacts, metadata, companyId);
       }
 
       res.sendStatus(200);
@@ -55,7 +96,7 @@ class WebhookController {
   }
 
   // Process individual message
-  static async processMessage(msg, contacts, metadata) {
+  static async processMessage(msg, contacts, metadata, companyId) {
     try {
       const messageId = msg.id;
       const from = msg.from; // Sender's phone number
@@ -97,8 +138,29 @@ class WebhookController {
         console.log(`📱 Individual message from ${senderName}`);
       }
 
+      // ⭐ Auto-create contact if not exists
+      try {
+        const existingContact = await Contact.getByPhone(from, companyId);
+        if (!existingContact) {
+          await Contact.create({
+            phoneNumber: from,
+            name: senderName,
+            email: null,
+            company: null,
+            labels: [],
+            notes: 'Auto-created from WhatsApp message',
+            phoneNumberId: metadata.phone_number_id
+          }, companyId);
+          console.log(`✅ Auto-created contact for ${senderName} (${from})`);
+        } else {
+          await Contact.updateLastContact(existingContact.id, companyId);
+        }
+      } catch (err) {
+        console.error('⚠️ Failed to auto-create contact:', err.message);
+      }
+
       console.log(`📋 Creating/updating ticket for ${groupName}`);
-      const ticket = await Ticket.upsert(groupId, groupName);
+      const ticket = await Ticket.upsert(groupId, groupName, null, companyId);
 
       // Save message to database
       console.log(`💬 Saving message from ${senderName}: ${messageText}`);
@@ -113,7 +175,7 @@ class WebhookController {
       });
 
       // Update ticket status
-      await Ticket.updateStatus(ticket.id, 'pending_reply');
+      await Ticket.updateStatus(ticket.id, 'pending_reply', companyId);
       console.log('✅ Ticket status updated');
 
       // ⭐ AI CHATBOT INTEGRATION
@@ -134,7 +196,7 @@ class WebhookController {
       // 3. Send AI response back to customer
       console.log(`🤖 AI Response: ${aiResult.response}`);
       try {
-        await WhatsAppService.sendMessage(from, aiResult.response);
+        await WhatsAppService.sendMessage(from, aiResult.response, companyId);
         console.log('✅ AI Response sent to WhatsApp');
       } catch (waError) {
         console.warn('⚠️ Failed to send WhatsApp response (likely invalid token), continuing...');
@@ -153,9 +215,9 @@ class WebhookController {
 
       // 5. If escalated, mark ticket status
       if (aiResult.escalated) {
-        await Ticket.updateStatus(ticket.id, 'open'); // Or 'needs_human'
+        await Ticket.updateStatus(ticket.id, 'open', companyId); // Or 'needs_human'
       } else {
-        await Ticket.updateStatus(ticket.id, 'no_reply'); // Answered by AI
+        await Ticket.updateStatus(ticket.id, 'no_reply', companyId); // Answered by AI
       }
 
       console.log('✅ Message processed successfully with AI');

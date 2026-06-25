@@ -13,7 +13,7 @@ import {
   BarChart3,
   RefreshCw
 } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const Dashboard = () => {
 
   const loadStats = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/analytics/stats');
+      const response = await api.get(`/analytics/stats`);
       const data = response.data.data;
       
       setStats({

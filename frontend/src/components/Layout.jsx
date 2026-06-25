@@ -10,11 +10,23 @@ import {
   Settings,
   User,
   LogOut,
-  Brain
+  Brain,
+  Building
 } from 'lucide-react';
 
 const Layout = ({ children }) => {
   const navigate = useNavigate();
+  
+  // Parse user from localStorage
+  let user = null;
+  try {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      user = JSON.parse(userStr);
+    }
+  } catch (e) {
+    console.error('Error parsing user from localStorage');
+  }
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -57,6 +69,11 @@ const Layout = ({ children }) => {
       path: '/settings',
       icon: Settings
     },
+    ...(user?.role === 'admin' ? [{
+      name: 'Company Settings',
+      path: '/company-settings',
+      icon: Building
+    }] : []),
     {
       name: 'Profile',
       path: '/profile',
@@ -114,8 +131,8 @@ const Layout = ({ children }) => {
               <User className="w-5 h-5 text-primary-600" />
             </div>
             <div className="flex-1">
-              <p className="font-medium text-gray-800">Koushik</p>
-              <p className="text-xs text-gray-500">Online</p>
+              <p className="font-medium text-gray-800">{user?.name || 'User'}</p>
+              <p className="text-xs text-gray-500 capitalize">{user?.role || 'Online'}</p>
             </div>
           </div>
           <button
