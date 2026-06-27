@@ -35,6 +35,11 @@ const Layout = ({ children }) => {
 
   const navItems = [
     {
+      name: 'About & Help',
+      path: '/about',
+      icon: Info
+    },
+    {
       name: 'Dashboard',
       path: '/dashboard',
       icon: LayoutDashboard
@@ -78,11 +83,6 @@ const Layout = ({ children }) => {
       name: 'Profile',
       path: '/profile',
       icon: User
-    },
-    {
-      name: 'About & Help',
-      path: '/about',
-      icon: Info
     }
   ];
 

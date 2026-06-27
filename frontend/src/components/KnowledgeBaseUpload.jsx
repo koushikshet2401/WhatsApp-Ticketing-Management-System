@@ -18,7 +18,7 @@ const KnowledgeBaseUpload = () => {
   const loadDocuments = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`${API_URL}/api/knowledge-base/documents`);
+      const response = await api.get(`/knowledge-base/documents`);
       setUploadedDocs(response.data.documents);
     } catch (error) {
       console.error('Error loading documents:', error);
@@ -47,7 +47,7 @@ const KnowledgeBaseUpload = () => {
 
     try {
       await api.post(
-        `${API_URL}/api/knowledge-base/upload`,
+        `/knowledge-base/upload`,
         formData,
         {
           headers: {
@@ -71,7 +71,7 @@ const KnowledgeBaseUpload = () => {
     if (!confirm(`Delete ${filename}?`)) return;
 
     try {
-      await api.delete(`${API_URL}/api/knowledge-base/documents/${filename}`);
+      await api.delete(`/knowledge-base/documents/${filename}`);
       alert('Document deleted successfully!');
       loadDocuments();
     } catch (error) {

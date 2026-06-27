@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, RefreshCw, Send, MoreVertical, Flag, CheckCircle, Clock, X, Reply, Forward, ListTodo, MessageSquare } from 'lucide-react';
+import { Search, RefreshCw, Send, MoreVertical, Flag, CheckCircle, Clock, X, Reply, Forward, ListTodo, MessageSquare, ArrowLeft } from 'lucide-react';
 import api from '../services/api';
 import CreateTicketModal from '../components/CreateTicketModal';
 
@@ -144,7 +144,18 @@ const TicketsInbox = () => {
   return (
     <div className="h-screen flex bg-gray-50">
       {/* LEFT: Ticket List */}
-      <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
+      <div className={`w-80 bg-white border-r border-gray-200 flex flex-col ${selectedTicket ? 'hidden md:flex' : 'flex'}`}>
+        {/* Navigation Header */}
+        <div className="p-4 border-b border-gray-200 bg-gray-50 flex items-center">
+          <button 
+            onClick={() => window.location.href = '/dashboard'}
+            className="flex items-center gap-2 text-gray-600 hover:text-primary-600 font-medium transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            Back to Dashboard
+          </button>
+        </div>
+        
         {/* Search */}
         <div className="p-4 border-b border-gray-200">
           <div className="relative">
@@ -213,6 +224,13 @@ const TicketsInbox = () => {
             {/* Header */}
             <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-white/80 backdrop-blur-sm sticky top-0 z-10">
               <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setSelectedTicket(null)}
+                  className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  title="Back to Tickets"
+                >
+                  <ArrowLeft className="w-5 h-5 text-gray-600" />
+                </button>
                 <div className="w-12 h-12 bg-primary-100 rounded-2xl flex items-center justify-center text-primary-600 font-bold text-xl shadow-inner">
                   {(selectedTicket.group_name || selectedTicket.title || 'C')[0].toUpperCase()}
                 </div>
