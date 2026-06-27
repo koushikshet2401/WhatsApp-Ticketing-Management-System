@@ -49,21 +49,17 @@ async function initDB() {
     }
     await connection.execute('SET FOREIGN_KEY_CHECKS = 1');
     
-    await runSQLFile(connection, '../setup.sql');
-    await runSQLFile(connection, '../patch.sql');
-    await runSQLFile(connection, '../patch2.sql');
-    await runSQLFile(connection, '../multi_tenant_patch.sql');
-    await runSQLFile(connection, '../migrations/create_whatsapp_config.sql');
+    await runSQLFile(connection, '../schema.sql');
     
-    await connection.execute('INSERT IGNORE INTO companies (id, name) VALUES (1, "Demo Company")');
+    await connection.execute("INSERT IGNORE INTO companies (id, name) VALUES (1, 'Demo Company')");
     const pwd = await bcrypt.hash('password123', 10);
     
     try {
-      await connection.execute('INSERT INTO staff (name, email, phone, password, role) VALUES ("Demo Admin", "admin@demo.com", "9876543210", ?, "admin")', [pwd]);
+      await connection.execute("INSERT INTO staff (name, email, phone, password, role) VALUES ('Demo Admin', 'admin@demo.com', '9876543210', ?, 'admin')", [pwd]);
     } catch(e) {
-      await connection.execute('INSERT INTO staff (name, email, phone, password, role, company_id) VALUES ("Demo Admin", "admin@demo.com", "9876543210", ?, "admin", 1)', [pwd]);
+      await connection.execute("INSERT INTO staff (name, email, phone, password, role, company_id) VALUES ('Demo Admin', 'admin@demo.com', '9876543210', ?, 'admin', 1)", [pwd]);
     }
-    console.log('? Database initialized successfully!');
+    console.log('✅ Database initialized successfully!');
     process.exit(0);
   } catch (err) {
     console.error('? Failed:', err);
