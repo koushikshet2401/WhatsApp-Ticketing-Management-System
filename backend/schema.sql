@@ -191,3 +191,21 @@ CREATE TABLE IF NOT EXISTS whatsapp_config (
   FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE,
   UNIQUE KEY unique_company_config (company_id)
 );
+
+-- 12. Message Templates
+CREATE TABLE IF NOT EXISTS message_templates (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    category VARCHAR(50) DEFAULT 'general',
+    variables JSON,
+    phone_number_id VARCHAR(255),
+    created_by INT,
+    is_active BOOLEAN DEFAULT TRUE,
+    usage_count INT DEFAULT 0,
+    company_id INT DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE,
+    FOREIGN KEY (created_by) REFERENCES staff(id) ON DELETE SET NULL
+);

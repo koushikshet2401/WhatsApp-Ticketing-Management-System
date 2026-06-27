@@ -68,7 +68,7 @@ class AuthController {
 
       // Generate JWT token
       const token = jwt.sign(
-        { id: staffId, email, name, role: 'admin' },
+        { id: staffId, email, name, role: 'admin', company_id: 1 },
         process.env.JWT_SECRET || 'your-secret-key',
         { expiresIn: '7d' }
       );
@@ -152,7 +152,7 @@ class AuthController {
 
       // Generate JWT token
       const token = jwt.sign(
-        { id: staff.id, email: staff.email, name: staff.name, role: staff.role },
+        { id: staff.id, email: staff.email, name: staff.name, role: staff.role, company_id: staff.company_id },
         process.env.JWT_SECRET || 'your-secret-key',
         { expiresIn: '7d' }
       );

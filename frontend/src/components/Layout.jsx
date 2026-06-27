@@ -10,7 +10,8 @@ import {
   Settings,
   User,
   LogOut,
-  Brain
+  Brain,
+  Info
 } from 'lucide-react';
 
 const Layout = ({ children }) => {
@@ -77,6 +78,11 @@ const Layout = ({ children }) => {
       name: 'Profile',
       path: '/profile',
       icon: User
+    },
+    {
+      name: 'About & Help',
+      path: '/about',
+      icon: Info
     }
   ];
 

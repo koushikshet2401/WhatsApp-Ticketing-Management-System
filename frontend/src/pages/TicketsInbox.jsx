@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, RefreshCw, Send, MoreVertical, Flag, CheckCircle, Clock, X, Reply, Forward, ListTodo } from 'lucide-react';
+import { Search, RefreshCw, Send, MoreVertical, Flag, CheckCircle, Clock, X, Reply, Forward, ListTodo, MessageSquare } from 'lucide-react';
 import api from '../services/api';
 import CreateTicketModal from '../components/CreateTicketModal';
 

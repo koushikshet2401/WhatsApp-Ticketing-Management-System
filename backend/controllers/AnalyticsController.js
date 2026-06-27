@@ -29,7 +29,7 @@ class AnalyticsController {
 
       // Active phone numbers
       const [phones] = await db.execute(
-        'SELECT COUNT(*) as count FROM phone_numbers WHERE is_active = true'
+        'SELECT COUNT(*) as count FROM whatsapp_config WHERE is_active = true'
       );
 
       res.json({
@@ -84,14 +84,14 @@ class AnalyticsController {
       // Performance by phone number
       const [byPhone] = await db.execute(`
         SELECT 
-          pn.display_name as name,
+          pn.phone_number_id as name,
           COUNT(DISTINCT t.id) as tickets,
           COUNT(m.id) as messages
-        FROM phone_numbers pn
-        LEFT JOIN tickets t ON pn.id = t.phone_number_id
-        LEFT JOIN messages m ON pn.id = m.phone_number_id
+        FROM whatsapp_config pn
+        LEFT JOIN tickets t ON pn.id = t.company_id
+        LEFT JOIN messages m ON t.id = m.ticket_id
         WHERE pn.is_active = true
-        GROUP BY pn.id, pn.display_name
+        GROUP BY pn.id, pn.phone_number_id
       `);
 
       res.json({

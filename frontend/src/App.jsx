@@ -15,6 +15,7 @@ import WhatsAppConfig from './pages/WhatsAppConfig';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import TicketsInbox from './pages/TicketsInbox';
+import AboutPage from './pages/AboutPage';
 
 function App() {
   return (
@@ -142,6 +143,17 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <ProfilePage />
+              </Layout>
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/about" 
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <AboutPage />
               </Layout>
             </ProtectedRoute>
           } 
