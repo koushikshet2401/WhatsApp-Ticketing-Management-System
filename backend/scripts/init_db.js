@@ -31,18 +31,29 @@ async function initDB() {
   
   try {
     const connection = await mysql.createConnection(dbConfig);
-    console.log('? Connected to database.');
+    console.log('✅ Connected to database.');
+    
+    console.log('Dropping existing tables for a clean slate...');
+    await connection.execute('SET FOREIGN_KEY_CHECKS = 0');
+    
+    // Drop all known tables so migrations can run cleanly
+    const tables = [
+      'messages', 'tasks', 'ticket_assignments', 'tickets', 
+      'document_chunks', 'documents', 'contacts', 'staff', 
+      'companies', 'settings', 'bulk_message_recipients', 
+      'bulk_messages', 'whatsapp_config'
+    ];
+    
+    for (const table of tables) {
+      await connection.execute(`DROP TABLE IF EXISTS ${table}`);
+    }
+    await connection.execute('SET FOREIGN_KEY_CHECKS = 1');
     
     await runSQLFile(connection, '../setup.sql');
     await runSQLFile(connection, '../patch.sql');
     await runSQLFile(connection, '../patch2.sql');
     await runSQLFile(connection, '../multi_tenant_patch.sql');
     await runSQLFile(connection, '../migrations/create_whatsapp_config.sql');
-    
-    await connection.execute('SET FOREIGN_KEY_CHECKS = 0');
-    await connection.execute('TRUNCATE TABLE messages'); await connection.execute('TRUNCATE TABLE tickets');
-    await connection.execute('TRUNCATE TABLE contacts'); await connection.execute('TRUNCATE TABLE staff');
-    await connection.execute('SET FOREIGN_KEY_CHECKS = 1');
     
     await connection.execute('INSERT IGNORE INTO companies (id, name) VALUES (1, "Demo Company")');
     const pwd = await bcrypt.hash('password123', 10);
