@@ -1,7 +1,36 @@
 const db = require('../config/database');
 const axios = require('axios');
+const crypto = require('crypto');
 
 const API_VERSION = process.env.WHATSAPP_API_VERSION || 'v18.0';
+
+const ENCRYPTION_KEY = crypto.scryptSync(process.env.JWT_SECRET || 'default_fallback_secret_key_123', 'whatsapp_salt', 32);
+const IV_LENGTH = 16;
+
+function encrypt(text) {
+  if (!text) return text;
+  const iv = crypto.randomBytes(IV_LENGTH);
+  const cipher = crypto.createCipheriv('aes-256-cbc', ENCRYPTION_KEY, iv);
+  let encrypted = cipher.update(text);
+  encrypted = Buffer.concat([encrypted, cipher.final()]);
+  return iv.toString('hex') + ':' + encrypted.toString('hex');
+}
+
+function decrypt(text) {
+  if (!text) return text;
+  try {
+    const parts = text.split(':');
+    if (parts.length !== 2) return text; // Plain text fallback
+    const iv = Buffer.from(parts[0], 'hex');
+    const encryptedText = Buffer.from(parts[1], 'hex');
+    const decipher = crypto.createDecipheriv('aes-256-cbc', ENCRYPTION_KEY, iv);
+    let decrypted = decipher.update(encryptedText);
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+    return decrypted.toString();
+  } catch (e) {
+    return text;
+  }
+}
 
 /**
  * Get WhatsApp config for a user.
@@ -17,8 +46,8 @@ async function getConfig(userId) {
     return {
       phoneNumberId: rows[0].whatsapp_phone_number_id,
       businessAccountId: rows[0].whatsapp_business_account_id,
-      accessToken: rows[0].whatsapp_access_token,
-      appSecret: rows[0].whatsapp_app_secret,
+      accessToken: decrypt(rows[0].whatsapp_access_token),
+      appSecret: decrypt(rows[0].whatsapp_app_secret),
       verifyToken: rows[0].whatsapp_verify_token,
       source: 'database'
     };
@@ -48,8 +77,8 @@ async function getConfigByPhoneNumberId(phoneNumberId) {
     return {
       userId: rows[0].user_id,
       phoneNumberId: rows[0].whatsapp_phone_number_id,
-      accessToken: rows[0].whatsapp_access_token,
-      appSecret: rows[0].whatsapp_app_secret,
+      accessToken: decrypt(rows[0].whatsapp_access_token),
+      appSecret: decrypt(rows[0].whatsapp_app_secret),
       verifyToken: rows[0].whatsapp_verify_token,
       source: 'database'
     };
@@ -101,7 +130,7 @@ async function saveConfig(userId, configData) {
        is_configured = false,
        updated_at = NOW()`,
     [userId, whatsapp_phone_number_id, whatsapp_business_account_id,
-     whatsapp_access_token, whatsapp_app_secret, whatsapp_verify_token, webhookUrl]
+     encrypt(whatsapp_access_token), encrypt(whatsapp_app_secret), whatsapp_verify_token, webhookUrl]
   );
 
   const [rows] = await db.execute('SELECT * FROM whatsapp_config WHERE user_id = ?', [userId]);

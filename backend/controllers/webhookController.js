@@ -83,15 +83,25 @@ class WebhookController {
         }
       }
 
-      // Process each message
-      for (const msg of messages) {
-        await WebhookController.processMessage(msg, contacts, metadata, config.userId);
-      }
-
+      // ⭐ Acknowledge webhook IMMEDIATELY to prevent Meta timeouts
       res.sendStatus(200);
+
+      // Process messages asynchronously in the background
+      (async () => {
+        try {
+          for (const msg of messages) {
+            await WebhookController.processMessage(msg, contacts, metadata, config.userId);
+          }
+        } catch (err) {
+          console.error('❌ Background processing error:', err);
+        }
+      })();
+
     } catch (error) {
       console.error('❌ Error processing webhook:', error);
-      res.sendStatus(500);
+      if (!res.headersSent) {
+        res.sendStatus(500);
+      }
     }
   }
 
