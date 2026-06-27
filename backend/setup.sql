@@ -1,9 +1,5 @@
 -- WhatsApp Ticketing System Database Setup
 
--- Create database
-CREATE DATABASE IF NOT EXISTS whatsapp_ticketing;
-USE whatsapp_ticketing;
-
 -- Table: tickets (each WhatsApp group is a ticket)
 CREATE TABLE IF NOT EXISTS tickets (
     id INT PRIMARY KEY AUTO_INCREMENT,
