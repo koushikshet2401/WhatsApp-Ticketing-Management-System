@@ -8,10 +8,10 @@ async function runSQLFile(connection, filePath) {
   try {
     const absolutePath = path.resolve(__dirname, filePath);
     if (!fs.existsSync(absolutePath)) {
-      console.log(\Skipping \ (not found)\);
+      console.log(`Skipping ${filePath} (not found)`);
       return;
     }
-    console.log(\Running \...\);
+    console.log(`Running ${filePath}...`);
     const sql = fs.readFileSync(absolutePath, 'utf8');
     const statements = sql.split(';').map(s => s.trim()).filter(s => s.length > 0);
     for (const statement of statements) { await connection.query(statement); }
