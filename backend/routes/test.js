@@ -51,8 +51,10 @@ router.post('/whatsapp/send', async (req, res) => {
 // Check mode
 router.get('/mode', (req, res) => {
   const useSimulator = process.env.USE_SIMULATOR === 'true';
+  const appMode = process.env.APP_MODE || 'production';
   
   res.json({
+    appMode,
     mode: useSimulator ? 'simulator' : 'real',
     simulator: {
       enabled: useSimulator,

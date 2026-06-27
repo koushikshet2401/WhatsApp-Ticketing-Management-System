@@ -10,8 +10,7 @@ import {
   Settings,
   User,
   LogOut,
-  Brain,
-  Building
+  Brain
 } from 'lucide-react';
 
 const Layout = ({ children }) => {
@@ -69,11 +68,11 @@ const Layout = ({ children }) => {
       path: '/settings',
       icon: Settings
     },
-    ...(user?.role === 'admin' ? [{
-      name: 'Company Settings',
-      path: '/company-settings',
-      icon: Building
-    }] : []),
+    {
+      name: 'WhatsApp Config',
+      path: '/settings/whatsapp',
+      icon: Settings
+    },
     {
       name: 'Profile',
       path: '/profile',

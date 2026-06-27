@@ -17,7 +17,7 @@ class TicketController {
       }
 
       // Check if ticket already exists
-      const existingTicket = await Ticket.getByGroupId(groupId, req.user.companyId);
+      const existingTicket = await Ticket.getByGroupId(groupId);
       if (existingTicket) {
         return res.status(409).json({
           success: false,
@@ -27,7 +27,7 @@ class TicketController {
       }
 
       // Create ticket
-      const ticket = await Ticket.upsert(groupId, groupName, description, req.user.companyId);
+      const ticket = await Ticket.upsert(groupId, groupName, description);
 
       res.status(201).json({
         success: true,
@@ -47,7 +47,7 @@ class TicketController {
   static async getAll(req, res) {
     try {
       const filter = req.query.filter || 'all'; // all, no_reply, pending_tasks
-      const tickets = await Ticket.getAll(filter, req.user.companyId);
+      const tickets = await Ticket.getAll(filter);
       
       res.json({
         success: true,
@@ -67,7 +67,7 @@ class TicketController {
     try {
       const ticketId = req.params.id;
       
-      const ticket = await Ticket.getById(ticketId, req.user.companyId);
+      const ticket = await Ticket.getById(ticketId);
       if (!ticket) {
         return res.status(404).json({
           success: false,
@@ -106,7 +106,7 @@ class TicketController {
         });
       }
 
-      await Ticket.updateStatus(ticketId, status, req.user.companyId);
+      await Ticket.updateStatus(ticketId, status);
 
       res.json({
         success: true,
@@ -134,7 +134,7 @@ class TicketController {
         });
       }
 
-      const ticket = await Ticket.getById(ticketId, req.user.companyId);
+      const ticket = await Ticket.getById(ticketId);
       if (!ticket) {
         return res.status(404).json({
           success: false,

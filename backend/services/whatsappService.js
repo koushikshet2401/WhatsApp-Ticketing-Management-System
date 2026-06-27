@@ -7,37 +7,33 @@ const simulator = require('./whatsappSimulator');
 class WhatsAppService {
   constructor() {
     // Check if we should use simulation mode
-    this.useSimulator = process.env.USE_SIMULATOR === 'true' || 
+    this.useSimulator = process.env.APP_MODE === 'demo' || 
+                       process.env.USE_SIMULATOR === 'true' || 
                        !process.env.WHATSAPP_ACCESS_TOKEN ||
                        process.env.WHATSAPP_ACCESS_TOKEN === 'demo_access_token';
 
     this.apiUrl = process.env.WHATSAPP_API_URL || 'https://graph.facebook.com/v18.0';
 
-    if (this.useSimulator) {
+    if (process.env.APP_MODE === 'demo') {
+      console.log('🎭 WhatsApp Service: Running in DEMO MODE');
+    } else if (this.useSimulator) {
       console.log('🎭 WhatsApp Service: Running in SIMULATION MODE');
     } else {
-      console.log('📱 WhatsApp Service: Using REAL WhatsApp API (Multi-Tenant)');
+      console.log('📱 WhatsApp Service: Using REAL WhatsApp API');
     }
   }
 
-  // Fetch dynamic credentials per company
-  async getCompanyCredentials(companyId) {
+  // Fetch dynamic credentials per user
+  async getCompanyCredentials(userId) {
     if (this.useSimulator) {
       return {
         phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID || 'simulator_phone_id',
         accessToken: process.env.WHATSAPP_ACCESS_TOKEN || 'simulator_token'
       };
     }
-    const db = require('../config/database');
-    const [companies] = await db.execute('SELECT * FROM companies WHERE id = ?', [companyId]);
-    const company = companies[0];
-    if (!company) throw new Error('Company not found');
     
-    // Fallback to .env if company credentials are not set (for backwards compatibility)
-    return {
-      phoneNumberId: company.whatsapp_phone_number_id || process.env.WHATSAPP_PHONE_NUMBER_ID,
-      accessToken: company.whatsapp_access_token || process.env.WHATSAPP_ACCESS_TOKEN
-    };
+    const whatsappConfigService = require('./whatsappConfigService');
+    return await whatsappConfigService.getConfig(userId || 1); // Fallback to 1
   }
 
   // Send a text message

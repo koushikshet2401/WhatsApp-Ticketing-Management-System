@@ -33,8 +33,8 @@ const templateRoutes = require('./routes/templates');
 const contactRoutes = require('./routes/contacts');
 const bulkMessageRoutes = require('./routes/bulkMessages');
 const kbRoutes = require('./routes/knowledgeBase');
+const whatsappConfigRoutes = require('./routes/whatsappConfigRoutes');
 const testRoutes = require('./routes/test');
-const companyRoutes = require('./routes/company');
 
 // Import database to test connection
 require('./config/database');
@@ -78,6 +78,7 @@ app.get('/api/health', (req, res) => {
     status: 'running',
     message: 'WhatsApp Ticketing System API',
     version: '1.0.0',
+    appMode: process.env.APP_MODE || 'production',
     endpoints: {
       health: '/api/health',
       auth: '/api/auth',
@@ -149,7 +150,7 @@ app.use('/api/templates', authMiddleware, templateRoutes);
 app.use('/api/contacts', authMiddleware, contactRoutes);
 app.use('/api/bulk-messages', authMiddleware, bulkMessageRoutes);
 app.use('/api/knowledge-base', authMiddleware, kbRoutes);
-app.use('/api/company', authMiddleware, companyRoutes); // NEW
+app.use('/api/whatsapp-config', whatsappConfigRoutes);
 
 // Serve static React files in production
 if (process.env.NODE_ENV === 'production') {

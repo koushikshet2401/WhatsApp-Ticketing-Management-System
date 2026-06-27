@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, AlertCircle, Phone, Lock } from 'lucide-react';
 import api from '../services/api';
@@ -8,7 +8,22 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [appMode, setAppMode] = useState('production');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkMode = async () => {
+      try {
+        const response = await api.get('/health');
+        if (response.data.appMode) {
+          setAppMode(response.data.appMode);
+        }
+      } catch (err) {
+        console.error('Failed to fetch app mode:', err);
+      }
+    };
+    checkMode();
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -50,6 +65,23 @@ const Login = () => {
           </h1>
           <p className="text-gray-600">Sign in to your account</p>
         </div>
+
+        {/* Demo Mode Banner */}
+        {appMode === 'demo' && (
+          <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h3 className="text-sm font-semibold text-blue-800 mb-2 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4" />
+              Demo Mode Active
+            </h3>
+            <p className="text-sm text-blue-700 mb-2">Use the following credentials to explore the demo:</p>
+            <div className="space-y-1 text-sm bg-white bg-opacity-60 rounded p-2 text-blue-900">
+              <div className="flex justify-between"><span>Admin:</span> <span className="font-mono font-medium">9876543210 / password123</span></div>
+              <div className="flex justify-between"><span>Agent Ravi:</span> <span className="font-mono font-medium">9876543211 / password123</span></div>
+              <div className="flex justify-between"><span>Agent Priya:</span> <span className="font-mono font-medium">9876543212 / password123</span></div>
+            </div>
+            <p className="text-xs text-blue-600 mt-2 italic">Note: WhatsApp API is simulated in demo mode.</p>
+          </div>
+        )}
 
         {/* Login Form */}
         <div className="bg-white rounded-2xl shadow-xl p-8">

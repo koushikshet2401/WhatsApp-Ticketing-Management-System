@@ -11,7 +11,7 @@ import ContactsPage from './pages/ContactsPage';
 import BulkMessagingPage from './pages/BulkMessagingPage';
 import PhoneNumbersPage from './pages/PhoneNumbersPage';
 import KnowledgeBasePage from './pages/KnowledgeBasePage';
-import CompanySettings from './pages/CompanySettings';
+import WhatsAppConfig from './pages/WhatsAppConfig';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import TicketsInbox from './pages/TicketsInbox';
@@ -113,6 +113,17 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        
+        <Route 
+          path="/settings/whatsapp" 
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <WhatsAppConfig />
+              </Layout>
+            </ProtectedRoute>
+          } 
+        />
 
         <Route 
           path="/knowledge-base" 
@@ -125,17 +136,6 @@ function App() {
           } 
         />
 
-        <Route 
-          path="/company-settings" 
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <CompanySettings />
-              </Layout>
-            </ProtectedRoute>
-          } 
-        />
-        
         <Route 
           path="/profile" 
           element={

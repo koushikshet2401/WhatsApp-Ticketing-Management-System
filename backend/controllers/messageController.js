@@ -9,7 +9,7 @@ class MessageController {
       const { ticketId } = req.params;
 
       // Verify ticket belongs to the user's company
-      const ticket = await Ticket.getById(ticketId, req.user.companyId);
+      const ticket = await Ticket.getById(ticketId);
       if (!ticket) {
         return res.status(404).json({
           success: false,
@@ -47,7 +47,7 @@ class MessageController {
       }
 
       // Get ticket and verify ownership
-      const ticket = await Ticket.getById(ticketId, req.user.companyId);
+      const ticket = await Ticket.getById(ticketId);
       if (!ticket) {
         return res.status(404).json({
           success: false,
@@ -69,7 +69,9 @@ class MessageController {
       }
 
       // Send via WhatsApp API
-      const whatsappResponse = await WhatsAppService.sendMessage(recipientId, message.trim(), req.user.companyId);
+      const whatsappConfigService = require('../services/whatsappConfigService');
+      const userId = req.user?.id || 1; // Fallback to 1 if no user context
+      const whatsappResponse = await whatsappConfigService.sendMessage(userId, recipientId, message.trim());
 
       // Save reply to database
       const messageId = whatsappResponse.messages?.[0]?.id || `msg_${Date.now()}`;
@@ -84,7 +86,7 @@ class MessageController {
       });
 
       // Update ticket status
-      await Ticket.updateStatus(ticketId, 'open', req.user.companyId);
+      await Ticket.updateStatus(ticketId, 'open');
 
       res.json({
         success: true,

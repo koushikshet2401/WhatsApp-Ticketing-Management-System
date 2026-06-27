@@ -2,12 +2,12 @@ const db = require('../config/database');
 
 class Contact {
   // Get all contacts with pagination and filters
-  static async getAll(filters = {}, companyId) {
+  static async getAll(filters = {}) {
     const { page = 1, limit = 50, search, label, phoneNumberId } = filters;
     const offset = (page - 1) * limit;
     
-    let query = 'SELECT * FROM contacts WHERE company_id = ?';
-    const params = [companyId];
+    let query = 'SELECT * FROM contacts';
+    const params = [];
     
     // Search filter
     if (search) {
@@ -41,8 +41,8 @@ class Contact {
     const [contacts] = await db.execute(query, params);
     
     // Get total count
-    let countQuery = 'SELECT COUNT(*) as total FROM contacts WHERE company_id = ?';
-    const countParams = [companyId, ...params.slice(1, -2)]; // Remove limit and offset, keep companyId
+    let countQuery = 'SELECT COUNT(*) as total FROM contacts';
+    const countParams = [...params.slice(1, -2)]; // Remove limit and offset, keep companyId
     
     if (search) {
       countQuery += ' AND (name LIKE ? OR phone_number LIKE ? OR email LIKE ? OR company LIKE ?)';
@@ -66,32 +66,32 @@ class Contact {
   }
 
   // Get by ID
-  static async getById(id, companyId) {
+  static async getById(id) {
     const [contacts] = await db.execute(
-      'SELECT * FROM contacts WHERE id = ? AND company_id = ?',
-      [id, companyId]
+      'SELECT * FROM contacts WHERE id = ?',
+      [id]
     );
     return contacts[0];
   }
 
   // Get by phone number
-  static async getByPhone(phoneNumber, companyId) {
+  static async getByPhone(phoneNumber) {
     const [contacts] = await db.execute(
-      'SELECT * FROM contacts WHERE phone_number = ? AND company_id = ?',
-      [phoneNumber, companyId]
+      'SELECT * FROM contacts WHERE phone_number = ?',
+      [phoneNumber]
     );
     return contacts[0];
   }
 
   // Create contact
-  static async create(data, companyId) {
+  static async create(data) {
     const { phoneNumber, name, email, company, labels, notes, phoneNumberId } = data;
     
     const [result] = await db.execute(
       `INSERT INTO contacts 
-       (phone_number, name, email, company, labels, notes, phone_number_id, company_id, last_contact_at) 
+       (phone_number, name, email, company, labels, notes, phone_number_id, last_contact_at) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
-      [phoneNumber, name, email, company, JSON.stringify(labels || []), notes, phoneNumberId, companyId]
+      [phoneNumber, name, email, company, JSON.stringify(labels || []), notes, phoneNumberId]
     );
 
     return {
@@ -105,60 +105,60 @@ class Contact {
   }
 
   // Update contact
-  static async update(id, data, companyId) {
+  static async update(id, data) {
     const { name, email, company, labels, notes } = data;
     
     await db.execute(
       `UPDATE contacts 
        SET name = ?, email = ?, company = ?, labels = ?, notes = ?, updated_at = NOW()
-       WHERE id = ? AND company_id = ?`,
-      [name, email, company, JSON.stringify(labels || []), notes, id, companyId]
+       WHERE id = ?`,
+      [name, email, company, JSON.stringify(labels || []), notes, id]
     );
   }
 
   // Add label to contact
-  static async addLabel(id, label, companyId) {
+  static async addLabel(id, label) {
     await db.execute(
       `UPDATE contacts 
        SET labels = JSON_ARRAY_APPEND(COALESCE(labels, '[]'), '$', ?), updated_at = NOW()
-       WHERE id = ? AND company_id = ? AND NOT JSON_CONTAINS(labels, ?)`,
-      [label, id, companyId, `"${label}"`]
+       WHERE id = ? AND NOT JSON_CONTAINS(labels, ?)`,
+      [label, id, `"${label}"`]
     );
   }
 
   // Remove label from contact
-  static async removeLabel(id, label, companyId) {
-    const contact = await this.getById(id, companyId);
+  static async removeLabel(id, label) {
+    const contact = await this.getById(id);
     if (contact && contact.labels) {
       const labels = JSON.parse(contact.labels);
       const newLabels = labels.filter(l => l !== label);
       
       await db.execute(
-        'UPDATE contacts SET labels = ?, updated_at = NOW() WHERE id = ? AND company_id = ?',
-        [JSON.stringify(newLabels), id, companyId]
+        'UPDATE contacts SET labels = ?, updated_at = NOW() WHERE id = ?',
+        [JSON.stringify(newLabels), id]
       );
     }
   }
 
   // Block/unblock contact
-  static async toggleBlock(id, companyId) {
+  static async toggleBlock(id) {
     await db.execute(
-      'UPDATE contacts SET is_blocked = NOT is_blocked WHERE id = ? AND company_id = ?',
-      [id, companyId]
+      'UPDATE contacts SET is_blocked = NOT is_blocked WHERE id = ?',
+      [id]
     );
   }
 
   // Update last contact time
-  static async updateLastContact(id, companyId) {
+  static async updateLastContact(id) {
     await db.execute(
-      'UPDATE contacts SET last_contact_at = NOW(), total_messages = total_messages + 1 WHERE id = ? AND company_id = ?',
-      [id, companyId]
+      'UPDATE contacts SET last_contact_at = NOW(), total_messages = total_messages + 1 WHERE id = ?',
+      [id]
     );
   }
 
   // Delete contact
-  static async delete(id, companyId) {
-    await db.execute('DELETE FROM contacts WHERE id = ? AND company_id = ?', [id, companyId]);
+  static async delete(id) {
+    await db.execute('DELETE FROM contacts WHERE id = ?', [id]);
   }
 
   // Get contact statistics
@@ -170,14 +170,13 @@ class Contact {
         COUNT(CASE WHEN is_blocked = true THEN 1 END) as blocked_contacts,
         SUM(total_messages) as total_interactions
       FROM contacts
-      WHERE company_id = ?
-    `, [companyId]);
+    `, []);
     
     return stats[0];
   }
 
   // Import contacts from CSV data
-  static async bulkImport(contacts, phoneNumberId, companyId) {
+  static async bulkImport(contacts, phoneNumberId) {
     const results = {
       success: 0,
       failed: 0,
@@ -194,7 +193,7 @@ class Contact {
           labels: contact.labels || [],
           notes: contact.notes,
           phoneNumberId
-        }, companyId);
+        });
         results.success++;
       } catch (error) {
         results.failed++;

@@ -10,7 +10,7 @@ class BulkMessageController {
         page: parseInt(page) || 1,
         limit: parseInt(limit) || 20,
         status
-      }, req.user.companyId);
+      });
 
       res.json({
         success: true,
@@ -28,7 +28,7 @@ class BulkMessageController {
   // Get bulk message by ID
   static async getById(req, res) {
     try {
-      const message = await BulkMessage.getById(req.params.id, req.user.companyId);
+      const message = await BulkMessage.getById(req.params.id);
       
       if (!message) {
         return res.status(404).json({
@@ -83,7 +83,7 @@ class BulkMessageController {
         templateId,
         phoneNumberId,
         createdBy: req.user?.id || 1
-      }, req.user.companyId);
+      });
 
       // Add recipients
       await BulkMessage.addRecipients(bulkMessageId, contactIds);
@@ -108,7 +108,7 @@ class BulkMessageController {
       const { id } = req.params;
 
       // Start sending in background
-      BulkMessage.send(id, req.user.companyId).then(result => {
+      BulkMessage.send(id).then(result => {
         console.log(`Bulk message ${id} sent:`, result);
       }).catch(error => {
         console.error(`Failed to send bulk message ${id}:`, error);
@@ -140,7 +140,7 @@ class BulkMessageController {
         });
       }
 
-      await BulkMessage.schedule(id, scheduledAt, req.user.companyId);
+      await BulkMessage.schedule(id, scheduledAt);
 
       res.json({
         success: true,
@@ -158,7 +158,7 @@ class BulkMessageController {
   // Cancel bulk message
   static async cancel(req, res) {
     try {
-      await BulkMessage.cancel(req.params.id, req.user.companyId);
+      await BulkMessage.cancel(req.params.id);
 
       res.json({
         success: true,
@@ -176,7 +176,7 @@ class BulkMessageController {
   // Delete bulk message
   static async delete(req, res) {
     try {
-      await BulkMessage.delete(req.params.id, req.user.companyId);
+      await BulkMessage.delete(req.params.id);
 
       res.json({
         success: true,
@@ -194,7 +194,7 @@ class BulkMessageController {
   // Get bulk message statistics
   static async getStats(req, res) {
     try {
-      const stats = await BulkMessage.getStats(req.user.companyId);
+      const stats = await BulkMessage.getStats(1);
 
       res.json({
         success: true,

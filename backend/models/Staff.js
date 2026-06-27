@@ -2,28 +2,27 @@ const db = require('../config/database');
 
 class Staff {
   // Create new staff member
-  static async create(name, email, phone, password, companyId = 1, role = 'agent') {
+  static async create(name, email, phone, password, role = 'agent') {
     const [result] = await db.execute(
-      'INSERT INTO staff (name, email, phone, password, company_id, role) VALUES (?, ?, ?, ?, ?, ?)',
-      [name, email, phone, password, companyId, role]
+      'INSERT INTO staff (name, email, phone, password, role) VALUES (?, ?, ?, ?, ?)',
+      [name, email, phone, password, role]
     );
     return result.insertId;
   }
 
   // Get all active staff for a company
-  static async getAll(companyId) {
+  static async getAll() {
     const [staff] = await db.execute(
-      'SELECT id, name, email, phone, is_active, created_at, role FROM staff WHERE is_active = TRUE AND company_id = ? ORDER BY name ASC',
-      [companyId]
+      'SELECT id, name, email, phone, is_active, created_at, role FROM staff WHERE is_active = TRUE ORDER BY name ASC'
     );
     return staff;
   }
 
   // Get by ID
-  static async getById(id, companyId) {
+  static async getById(id) {
     const [staff] = await db.execute(
-      'SELECT id, name, email, phone, is_active, company_id, role FROM staff WHERE id = ? AND company_id = ?',
-      [id, companyId]
+      'SELECT id, name, email, phone, is_active, role FROM staff WHERE id = ?',
+      [id]
     );
     return staff[0];
   }
@@ -31,7 +30,7 @@ class Staff {
   // Get by email (includes password for login)
   static async getByEmail(email) {
     const [staff] = await db.execute(
-      'SELECT id, name, email, phone, password, is_active, company_id, role FROM staff WHERE email = ?',
+      'SELECT id, name, email, phone, password, is_active, role FROM staff WHERE email = ?',
       [email]
     );
     return staff[0];
@@ -40,7 +39,7 @@ class Staff {
   // Get by phone (includes password for login)
   static async getByPhone(phone) {
     const [staff] = await db.execute(
-      'SELECT id, name, email, phone, password, is_active, company_id, role FROM staff WHERE phone = ?',
+      'SELECT id, name, email, phone, password, is_active, role FROM staff WHERE phone = ?',
       [phone]
     );
     return staff[0];
@@ -74,10 +73,10 @@ class Staff {
   }
 
   // Deactivate staff
-  static async deactivate(id, companyId) {
+  static async deactivate(id) {
     await db.execute(
-      'UPDATE staff SET is_active = FALSE WHERE id = ? AND company_id = ?',
-      [id, companyId]
+      'UPDATE staff SET is_active = FALSE WHERE id = ?',
+      [id]
     );
   }
 }

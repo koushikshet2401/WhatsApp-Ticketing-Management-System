@@ -6,13 +6,13 @@ class AuthController {
   // Register new staff member
   static async register(req, res) {
     try {
-      const { name, email, phone, password, companyName } = req.body;
+      const { name, email, phone, password } = req.body;
 
       // Validation
-      if (!name || !email || !phone || !password || !companyName) {
+      if (!name || !email || !phone || !password) {
         return res.status(400).json({
           success: false,
-          error: 'All fields (including company name) are required'
+          error: 'All fields are required'
         });
       }
 
@@ -63,20 +63,12 @@ class AuthController {
       // Hash password
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Create company first
-      const db = require('../config/database');
-      const [companyResult] = await db.execute(
-        'INSERT INTO companies (name) VALUES (?)',
-        [companyName]
-      );
-      const companyId = companyResult.insertId;
-
-      // Create staff member (as admin for this new company)
-      const staffId = await Staff.create(name, email, phone, hashedPassword, companyId, 'admin');
+      // Create staff member (as admin)
+      const staffId = await Staff.create(name, email, phone, hashedPassword, 'admin');
 
       // Generate JWT token
       const token = jwt.sign(
-        { id: staffId, email, name, companyId, role: 'admin' },
+        { id: staffId, email, name, role: 'admin' },
         process.env.JWT_SECRET || 'your-secret-key',
         { expiresIn: '7d' }
       );
@@ -88,7 +80,6 @@ class AuthController {
           name,
           email,
           phone,
-          companyId,
           role: 'admin',
           token
         }
@@ -161,7 +152,7 @@ class AuthController {
 
       // Generate JWT token
       const token = jwt.sign(
-        { id: staff.id, email: staff.email, name: staff.name, companyId: staff.company_id, role: staff.role },
+        { id: staff.id, email: staff.email, name: staff.name, role: staff.role },
         process.env.JWT_SECRET || 'your-secret-key',
         { expiresIn: '7d' }
       );
@@ -173,7 +164,6 @@ class AuthController {
           name: staff.name,
           email: staff.email,
           phone: staff.phone,
-          companyId: staff.company_id,
           role: staff.role,
           token
         }
@@ -207,7 +197,6 @@ class AuthController {
           name: staff.name,
           email: staff.email,
           phone: staff.phone,
-          companyId: staff.company_id,
           role: staff.role
         }
       });
