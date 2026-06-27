@@ -34,9 +34,9 @@ async function initDB() {
     console.log('? Connected to database.');
     
     await runSQLFile(connection, '../setup.sql');
-    await runSQLFile(connection, '../multi_tenant_patch.sql');
     await runSQLFile(connection, '../patch.sql');
     await runSQLFile(connection, '../patch2.sql');
+    await runSQLFile(connection, '../multi_tenant_patch.sql');
     await runSQLFile(connection, '../migrations/create_whatsapp_config.sql');
     
     await connection.execute('SET FOREIGN_KEY_CHECKS = 0');

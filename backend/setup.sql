@@ -18,6 +18,22 @@ CREATE TABLE IF NOT EXISTS tickets (
     INDEX idx_last_message (last_message_at)
 );
 
+-- Table: contacts (customer contacts)
+CREATE TABLE IF NOT EXISTS contacts (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    phone_number VARCHAR(50) UNIQUE,
+    name VARCHAR(255),
+    email VARCHAR(255),
+    company VARCHAR(255),
+    labels JSON,
+    notes TEXT,
+    phone_number_id VARCHAR(50),
+    is_blocked BOOLEAN DEFAULT false,
+    total_messages INT DEFAULT 0,
+    last_contact_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
 -- Table: messages (all WhatsApp messages)
 CREATE TABLE IF NOT EXISTS messages (
     id INT PRIMARY KEY AUTO_INCREMENT,
