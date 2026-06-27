@@ -13,4 +13,3 @@ INSERT IGNORE INTO settings (`key`, `value`) VALUES
 
 -- Add missing indexes
 CREATE INDEX idx_contacts_phone ON contacts(phone_number);
-CREATE INDEX idx_bulk_msg_status ON bulk_messages(status);

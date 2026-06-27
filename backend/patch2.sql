@@ -12,11 +12,11 @@ CREATE TABLE IF NOT EXISTS bulk_messages (
     started_at DATETIME, 
     completed_at DATETIME, 
     scheduled_at DATETIME, 
-    company_id INT DEFAULT 1, 
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, 
-    FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+CREATE INDEX idx_bulk_msg_status ON bulk_messages(status);
 
 CREATE TABLE IF NOT EXISTS bulk_message_recipients (
     id INT PRIMARY KEY AUTO_INCREMENT, 
