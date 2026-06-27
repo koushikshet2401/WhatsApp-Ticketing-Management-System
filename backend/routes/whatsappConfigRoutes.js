@@ -63,6 +63,18 @@ router.post('/', authMiddleware, async (req, res) => {
       whatsapp_verify_token
     });
 
+    // Clear dummy data so the user sees a fresh workspace with their actual data
+    try {
+      await db.execute('DELETE FROM tasks');
+      await db.execute('DELETE FROM messages');
+      await db.execute('DELETE FROM tickets');
+      await db.execute('DELETE FROM contacts');
+      await db.execute('DELETE FROM document_chunks');
+      await db.execute('DELETE FROM documents');
+    } catch (clearErr) {
+      console.error('Error clearing dummy data:', clearErr);
+    }
+
     res.json({
       success: true,
       message: 'Credentials saved. Click "Test Connection" to verify.',

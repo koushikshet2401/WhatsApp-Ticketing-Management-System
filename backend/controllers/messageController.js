@@ -36,10 +36,11 @@ class MessageController {
   static async sendReply(req, res) {
     try {
       const { ticketId } = req.params;
-      const { message, staffName = 'Support Team' } = req.body;
+      const { message, messageText, staffName = 'Support Team' } = req.body;
+      const finalMessage = message || messageText;
 
       // Validation
-      if (!message || message.trim().length === 0) {
+      if (!finalMessage || finalMessage.trim().length === 0) {
         return res.status(400).json({
           success: false,
           error: 'Message cannot be empty'
@@ -71,7 +72,7 @@ class MessageController {
       // Send via WhatsApp API
       const whatsappConfigService = require('../services/whatsappConfigService');
       const userId = req.user?.id || 1; // Fallback to 1 if no user context
-      const whatsappResponse = await whatsappConfigService.sendMessage(userId, recipientId, message.trim());
+      const whatsappResponse = await whatsappConfigService.sendMessage(userId, recipientId, finalMessage.trim());
 
       // Save reply to database
       const messageId = whatsappResponse.messages?.[0]?.id || `msg_${Date.now()}`;
@@ -79,7 +80,7 @@ class MessageController {
         ticketId: ticketId,
         messageId: messageId,
         senderName: staffName,
-        messageText: message.trim(),
+        messageText: finalMessage.trim(),
         messageType: 'text',
         isFromCustomer: false,
         timestamp: new Date()

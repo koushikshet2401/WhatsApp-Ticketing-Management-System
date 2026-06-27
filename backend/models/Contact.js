@@ -6,7 +6,7 @@ class Contact {
     const { page = 1, limit = 50, search, label, phoneNumberId } = filters;
     const offset = (page - 1) * limit;
     
-    let query = 'SELECT * FROM contacts';
+    let query = 'SELECT * FROM contacts WHERE 1=1';
     const params = [];
     
     // Search filter
@@ -36,13 +36,13 @@ class Contact {
     
     // Pagination
     query += ' LIMIT ? OFFSET ?';
-    params.push(limit, offset);
+    params.push(String(limit), String(offset));
     
     const [contacts] = await db.execute(query, params);
     
     // Get total count
-    let countQuery = 'SELECT COUNT(*) as total FROM contacts';
-    const countParams = [...params.slice(1, -2)]; // Remove limit and offset, keep companyId
+    let countQuery = 'SELECT COUNT(*) as total FROM contacts WHERE 1=1';
+    const countParams = [...params.slice(0, -2)]; // Remove limit and offset
     
     if (search) {
       countQuery += ' AND (name LIKE ? OR phone_number LIKE ? OR email LIKE ? OR company LIKE ?)';

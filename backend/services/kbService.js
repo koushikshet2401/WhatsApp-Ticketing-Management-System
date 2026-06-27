@@ -17,8 +17,8 @@ class KBService {
       });
       return response.data[0].embedding;
     } catch (error) {
-      console.error('❌ Error generating embedding:', error);
-      throw error;
+      console.error('❌ Error generating embedding:', error.message);
+      return null;
     }
   }
 
